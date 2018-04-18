@@ -188,6 +188,7 @@ namespace xbitsServer
                     int year = dateString.Year;
                     int month = dateString.Month;
                     int dayofmonth = dateString.Day;
+                    path += "\\RightBiotic\\";
                     path += year.ToString() + "\\";
                     path += months[month] + "\\";
                     path += dayofmonth.ToString();
@@ -277,7 +278,7 @@ namespace xbitsServer
 
             int year = dt.Year;
             String path = Properties.Settings.Default.Path;
-            path += year.ToString();
+            path += "\\RightBiotic\\"+year.ToString();
             path += "\\"+months[dt.Month];
             try
             {
