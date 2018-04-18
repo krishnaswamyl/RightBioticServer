@@ -52,6 +52,7 @@ namespace xbitsServer
             OpenFileDialog choofdlog = new OpenFileDialog();
             choofdlog.Filter = "All Files (*.txt)|*.txt";
             choofdlog.FilterIndex = 1;
+            //choofdlog.InitialDirectory = Properties.Settings.Default.Path.ToString() + "RightBiotic\\";
             DialogResult dr = choofdlog.ShowDialog();
             if(dr == DialogResult.Cancel)
             {
