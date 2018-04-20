@@ -14,6 +14,7 @@ using System.IO;
 using System.Diagnostics;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using System.IO.Ports;
 
 namespace xbitsServer
 {
@@ -22,16 +23,22 @@ namespace xbitsServer
         public static IPAddress ipAddress;
         public static int PortNo = 3000;
         public static Thread serverThread;
+        public static Thread comportThread;
+        static SerialPort SP1;
+        static AutoResetEvent waitserial;
+        private static readonly Object _Lock = new Object();
+        bool read_timeout_flag = false;
         String[] months = { "ETC", "Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec" };
-        public StateObject state2;
+        public StateObject state2;        
         public volatile bool stopServer = false;
+        public volatile bool stopComServer = false;
         String content = String.Empty;
         public class StateObject
         {
             // Client  socket.  
             public Socket workSocket = null;
             // Size of receive buffer.  
-            public const int BufferSize = 1024;
+            public const int BufferSize = 4096;
             // Receive buffer.  
             public byte[] buffer = new byte[BufferSize];
             // Received data string.  
@@ -42,22 +49,22 @@ namespace xbitsServer
         public Form1()
         {
             InitializeComponent();
+            SP1 = new SerialPort();
+            SP1.DataReceived += new SerialDataReceivedEventHandler(this.SP1_DataReceived);
+            waitserial = new AutoResetEvent(false);
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //linkLabelPath.Text = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-            linkLabelPath.Text = Properties.Settings.Default.Path;
-            ipAddress = LocalIPAddress();
-            if(ipAddress==null)
+            int con = 0;
+            string[] portNames = SerialPort.GetPortNames();     //<-- Reads all available comPorts
+            foreach (var portName in portNames)
             {
-                richTextBox1.Text = "Please Check WiFi or Local Lan Connection..";
-                return;
-            }
-            labelIPadd.Text = ipAddress.ToString();
-            richTextBox1.AppendText( "Server is up and Listing on:" + labelIPadd.Text.ToString()+":"+PortNo);
-            serverThread = new Thread(StartListening);
-            serverThread.Start();
+                comboBoxComport.Items.Add(portName);                  //<-- Adds Ports to combobox
+                con++;
+            }if(con > 0) { comboBoxComport.SelectedIndex = 0; }
+            
+            
         }
 
         private void buttonChooseFolder_Click(object sender, EventArgs e)
@@ -77,6 +84,12 @@ namespace xbitsServer
         {
             stopServer = true;
             allDone.Set();
+            if(SP1.IsOpen)
+            {
+                SP1.Dispose();
+                SP1.Close();
+            }
+            
             this.Close();
         }
 
@@ -181,51 +194,8 @@ namespace xbitsServer
                 
                 if (content.IndexOf("END") > -1)
                 {
-                    char[] charsToTrim = { '\r', '\n' };
-                    char[] charsToTrimPid = {':'};
-                    String[] split = content.Split(charsToTrim);
-                    DateTime dateString = DateTime.Parse(split[1]);
-                    int year = dateString.Year;
-                    int month = dateString.Month;
-                    int dayofmonth = dateString.Day;
-                    path += "\\RightBiotic\\";
-                    path += year.ToString() + "\\";
-                    path += months[month] + "\\";
-                    path += dayofmonth.ToString();
-                    path = linkLabelPath.Text.ToString() +"\\"+ path;                   
-                    String[] pid = split[0].Split(charsToTrimPid);
-                    String filename = pid[1];
-                    filename += " "+dateString.Hour.ToString() + " " + dateString.Minute.ToString() + " " + dateString.Second.ToString();
-                    if (Directory.Exists(path))
-                    { 
-                        using (System.IO.StreamWriter file =
-                        new System.IO.StreamWriter(path + "\\"+filename+".txt", true))
-                        {
-                            foreach (String sl in split)
-                            {
-                                file.WriteLine(sl);
-                            }
-
-                            file.Flush();
-                            file.Close();
-                        }
-
-                    }
-                    else
-                    {
-                        Directory.CreateDirectory(path);
-                        using (System.IO.StreamWriter file =
-                        new System.IO.StreamWriter(path + "\\" + filename + ".txt", true))
-                        {
-                            foreach (String sl in split)
-                            {
-                                file.WriteLine(sl);
-                            }
-                            file.Flush();
-                            file.Close();
-                        }
-                    }
-
+                    WriteStringtoFile(content);
+                    
                     String ipadd = handler.RemoteEndPoint.ToString();
                     richTextBox1.Invoke(new Action(() => { richTextBox1.AppendText("\nReceived Data From: "+ ipadd); }));
                     // Echo the data back to the client.
@@ -237,6 +207,7 @@ namespace xbitsServer
                     // Not all data received. Get more.  
                     handler.BeginReceive(state2.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), state2);
+
                 }
             }
         }
@@ -271,6 +242,55 @@ namespace xbitsServer
                 Console.WriteLine(e.ToString());
             }
         }
+        private  void WriteStringtoFile(String st)
+        {
+           
+            String path = String.Empty;
+            char[] charsToTrim = { '\r', '\n' };
+            char[] charsToTrimPid = { ':' };
+            String[] split = st.Split(charsToTrim);
+            DateTime dateString = DateTime.Parse(split[1]);
+            int year = dateString.Year;
+            int month = dateString.Month;
+            int dayofmonth = dateString.Day;
+            path += "RightBiotic\\";
+            path += year.ToString() + "\\";
+            path += months[month] + "\\";
+            path += dayofmonth.ToString();
+            path = linkLabelPath.Text.ToString() + "\\" + path;
+            String[] pid = split[0].Split(charsToTrimPid);
+            String filename = pid[1];
+            filename += " " + dateString.Hour.ToString() + " " + dateString.Minute.ToString() + " " + dateString.Second.ToString();
+            if (Directory.Exists(path))
+            {
+                using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(path + "\\" + filename + ".txt", true))
+                {
+                    foreach (String sl in split)
+                    {
+                        file.WriteLine(sl);
+                    }
+
+                    file.Flush();
+                    file.Close();
+                }
+
+            }
+            else
+            {
+                Directory.CreateDirectory(path);
+                using (System.IO.StreamWriter file =
+                new System.IO.StreamWriter(path + "\\" + filename + ".txt", true))
+                {
+                    foreach (String sl in split)
+                    {
+                        file.WriteLine(sl);
+                    }
+                    file.Flush();
+                    file.Close();
+                }
+            }
+        }
 
         private void linkLabelPath_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -296,6 +316,240 @@ namespace xbitsServer
         {
             PatientDetails pd = new PatientDetails();
             pd.ShowDialog();
+        }
+
+        private void buttonStartServer_Click(object sender, EventArgs e)
+        {
+            if(radioButtonWiFi.Checked)
+            {
+                MessageBox.Show("WiFi checked");
+                linkLabelPath.Text = Properties.Settings.Default.Path;
+                ipAddress = LocalIPAddress();
+                richTextBox1.Clear();
+                if (ipAddress == null)
+                {
+                    richTextBox1.Text = "Please Check WiFi or Local Lan Connection..";
+                    return;
+                }
+                labelIPadd.Text = ipAddress.ToString();
+                richTextBox1.AppendText("Server is up and Listening on:" + labelIPadd.Text.ToString() + ":" + PortNo);
+                buttonStartServer.Enabled = false;
+                serverThread = new Thread(StartListening);
+                serverThread.Start();
+            }
+            else
+            {
+                MessageBox.Show("Comport Selected");
+                if (!SP1.IsOpen)
+                {
+                    MessageBox.Show("Please open Com Port..");
+                    return;
+                }
+                buttonStartServer.Enabled = false;
+                comportThread = new Thread(startListeningonComport);
+                comportThread.Start();
+            }
+        }
+
+        private void radioButtonComport_Click(object sender, EventArgs e)
+        {
+            int con = 0;
+            string[] portNames = SerialPort.GetPortNames();     //<-- Reads all available comPorts
+            comboBoxComport.Items.Clear();
+            foreach (var portName in portNames)
+            {
+                comboBoxComport.Items.Add(portName);                  //<-- Adds Ports to combobox
+                con++;
+            }
+            if (con > 0) { comboBoxComport.SelectedIndex = 0; }
+        }
+
+        private string WriteAndReadCom(string com)
+        {
+            lock (_Lock)
+            {
+                string temp = null;
+
+                read_timeout_flag = false;
+                if (SP1.IsOpen == false)
+                {
+                    MessageBox.Show("Please connect to comm");
+                    return ("N");
+                }
+                SP1.DiscardInBuffer();
+                SP1.WriteTimeout = 2000;
+                SP1.ReadTimeout = 2000;
+                SP1.WriteLine(com);
+                int bytestoread = 0;
+                int timeup = 0;
+                do
+                {
+                    Thread.Sleep(100);
+                    bytestoread = SP1.BytesToRead;
+                    if (bytestoread > 0) break;
+                    timeup++;
+                    if (timeup > 60)
+                    {
+                        read_timeout_flag = true;
+                        break;
+                    }
+
+
+                } while (true);
+                if (read_timeout_flag == true)
+                {
+                    MessageBox.Show("Target Not Responding.\n Please check connections and cable");
+                    return "N";
+                }
+                //char[] buf = new char[bytestoread];
+                //try
+                //{
+                //    SP1.Read(buf, 0, bytestoread);
+                //    String xt = new string(buf);
+                //    //richTextBoxOut.AppendText(xt);
+                //    arrst = xt.Split(split);
+
+                //}
+                //catch (TimeoutException)
+                //{
+                //    read_timeout_flag = true;
+                //    MessageBox.Show("Target Not Responding.\n Please check connections and cable");
+                //    return "N";
+                //}
+
+                return ("A");
+
+            }
+        }
+
+        private void buttonOpenCom_Click(object sender, EventArgs e)
+        {
+            if (buttonOpenCom.Text.Equals("Open Com Port"))
+            {
+                string Comportname;
+                try
+                {
+                    Comportname = comboBoxComport.SelectedItem.ToString();
+                }
+                catch (NullReferenceException)
+                {
+                    MessageBox.Show("Select A Valid Comm Port");
+                    return;
+                }
+                if (radioButton1.Checked)
+                {
+                    SP1.BaudRate = 115200;
+                }
+                else
+                {
+                    SP1.BaudRate = 9600;
+                }
+                SP1.PortName = Comportname;
+                SP1.ReadBufferSize = 4096;
+                SP1.ReadTimeout = 3000;
+                SP1.NewLine = "\r\n";
+                try
+                {
+                    SP1.Open();
+                }
+                catch (Exception se)
+                {
+                    MessageBox.Show(se.Message.ToString());
+                    return;
+                }
+                buttonOpenCom.Text = "Close Com Port";
+                buttonOpenCom.BackColor = Color.HotPink;
+            }
+            else
+            {
+                SP1.DataReceived -= new SerialDataReceivedEventHandler(this.SP1_DataReceived);
+                SP1.Dispose();
+                SP1.Close();
+                buttonOpenCom.Text = "Open Com Port";
+                buttonOpenCom.BackColor = Color.LightGreen; 
+            }
+        }
+        private String readComport(int timeout)
+        {
+            String res = String.Empty;
+            SP1.ReadTimeout = timeout;
+            try
+            {
+                res = SP1.ReadLine();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+                return "N";
+            }
+            return res;
+        }
+
+        private void startListeningonComport()
+        {
+            
+            stopComServer = true;
+            char[] split = { ' ' };
+            
+            String[] res;
+            waitserial.Reset();
+            while (stopComServer)
+            {
+                
+                int count=0;
+                waitserial.WaitOne();
+                String incom = readComport(2000);
+                if (incom.Equals("N"))
+                {
+                    continue;
+                }
+                if (incom.Length > 3)
+                {
+                    res = incom.Split(split);
+                }
+                else
+                {
+                    SP1.DiscardInBuffer();
+                    waitserial.Reset();
+                    continue;
+                }
+                try
+                {
+                    count = int.Parse(res[1]);
+                    SP1.WriteLine("A");
+                }catch(Exception)
+                {
+                    // To Do code here
+                    continue;
+                }
+                StringBuilder sb = new StringBuilder();
+                waitserial.Reset();
+                for( int sin=0; sin < count; sin++)
+                {
+                    waitserial.WaitOne();
+                    sb.Append(readComport(1000)+"\n");
+                }
+                SP1.WriteLine("A");
+                content = String.Empty;
+                content = sb.ToString();
+                WriteStringtoFile(content);
+                richTextBox1.Invoke(new Action(() => { richTextBox1.AppendText("\nReceived Data File From ComPort: "); }));
+
+            }
+        }
+        private void SP1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            int bytestoread = 0;
+            //Thread.Sleep(10);
+            if (bytestoread > 0)
+            {
+                Invoke(new Action(() =>
+                {                    
+                    toolStripStatusLabel1.Text = "Data received..";
+
+                }));
+
+            }
+            waitserial.Set();
         }
     }
 }
