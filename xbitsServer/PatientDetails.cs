@@ -241,25 +241,43 @@ namespace xbitsServer
             pc = new PdfPCell(new Phrase("Result"));
             pc.HorizontalAlignment = 1;
             table.AddCell(pc);
-            char[] sp = { ' ' };
+            char[] sp = {' '};
             for (int i=5; i<lines.Length;i++)
             {
                 String [] kt = lines[i].Split(sp);
-                for(int mn=0; mn < kt.Length; mn++)
-                {
-                    if (kt.Length > 1)
-                    {
-                        if (kt[mn].Length > 1) {
-                            table.AddCell(kt[mn]);
-                        }
-                        
-                       
-                    }
-                }
-                
-                
+                table.AddCell(kt[0]);
+                table.AddCell(kt[kt.Length-1]);
             }
             document.Add(table);
+            String rep = "---REPORT---";
+            Paragraph reppara = new Paragraph();
+            reppara.Alignment = Element.ALIGN_CENTER;
+            reppara.Add(rep);
+            reppara.SpacingBefore = 25;
+            document.Add(reppara);
+
+            reppara = new Paragraph();
+            reppara.Alignment = Element.ALIGN_LEFT;
+            reppara.Add(richTextBoxReport.Text.ToString());
+            document.Add(reppara);
+
+            reppara = new Paragraph();
+            reppara.Alignment = Element.ALIGN_LEFT;
+            reppara.SpacingBefore = 80;
+            reppara.TabSettings = new TabSettings(90);
+            reppara.Add(new Chunk("Lab Technician"));
+            reppara.Add(Chunk.TABBING);
+            reppara.Add(Chunk.TABBING);
+            reppara.Add(Chunk.TABBING);
+            reppara.Add(Chunk.TABBING);
+
+            reppara.Add(new Chunk("Report By:\n"));
+            reppara.Add(Chunk.TABBING);
+            reppara.Add(Chunk.TABBING);
+            reppara.Add(Chunk.TABBING);
+            reppara.Add(Chunk.TABBING);
+            reppara.Add(new Chunk("Dr." + textBoxRepDoc.Text.ToString()));
+            document.Add(reppara);
             document.Dispose();
             //document.NewPage();
             System.Diagnostics.Process.Start(F_name);
@@ -302,7 +320,7 @@ namespace xbitsServer
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                MessageBox.Show(ex.Message.ToString());
             }
         }
     }
