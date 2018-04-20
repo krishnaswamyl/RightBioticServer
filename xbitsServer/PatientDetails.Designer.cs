@@ -449,7 +449,7 @@
             this.textBoxRepDoc.Name = "textBoxRepDoc";
             this.textBoxRepDoc.Size = new System.Drawing.Size(498, 29);
             this.textBoxRepDoc.TabIndex = 6;
-            this.textBoxRepDoc.Text = "Report prepared by Doctor Name";
+            this.textBoxRepDoc.Text = "Doctor Name";
             // 
             // richTextBoxReport
             // 

@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -242,9 +243,12 @@ namespace xbitsServer
             pc.HorizontalAlignment = 1;
             table.AddCell(pc);
             char[] sp = {' '};
+            String[] kt;
             for (int i=5; i<lines.Length;i++)
             {
-                String [] kt = lines[i].Split(sp);
+                //var regex = new Regex("   +");
+                //var result = regex.Split(lines[i]);
+                kt = lines[i].Split(sp);
                 table.AddCell(kt[0]);
                 table.AddCell(kt[kt.Length-1]);
             }
