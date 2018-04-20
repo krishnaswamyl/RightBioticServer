@@ -253,7 +253,7 @@ namespace xbitsServer
             int year = dateString.Year;
             int month = dateString.Month;
             int dayofmonth = dateString.Day;
-            path += "\\RightBiotic\\";
+            path += "RightBiotic\\";
             path += year.ToString() + "\\";
             path += months[month] + "\\";
             path += dayofmonth.ToString();

@@ -109,7 +109,7 @@ namespace xbitsServer
         private void buttonPrint_Click(object sender, EventArgs e)
         {
             String pid = textBoxPid.Text;
-            if(pid.Length < 5)
+            if(pid.Length < 1)
             {
                 MessageBox.Show("Patient ID is less than 5 characters\n Please select a vaild File");
                 return;
@@ -224,7 +224,7 @@ namespace xbitsServer
             para.Add(new Chunk("Bacterial Load"));
             para.Add(Chunk.TABBING);
             para.Add(new Chunk(":"));
-            para.Add(new Chunk(lines[3] + "\n"));
+            para.Add(new Chunk(lines[3] + " Cells per mL"+ "\n"));
 
             document.Add(para);
             
