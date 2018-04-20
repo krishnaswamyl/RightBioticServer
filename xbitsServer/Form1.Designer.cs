@@ -40,16 +40,20 @@
             this.buttonPrint = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.buttonStartServer = new System.Windows.Forms.Button();
-            this.radioButtonWiFi = new System.Windows.Forms.RadioButton();
-            this.radioButtonComport = new System.Windows.Forms.RadioButton();
-            this.comboBoxComport = new System.Windows.Forms.ComboBox();
-            this.buttonOpenCom = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.comboBoxComport = new System.Windows.Forms.ComboBox();
+            this.radioButtonComport = new System.Windows.Forms.RadioButton();
+            this.radioButtonWiFi = new System.Windows.Forms.RadioButton();
+            this.buttonOpenCom = new System.Windows.Forms.Button();
+            this.buttonStartServer = new System.Windows.Forms.Button();
+            this.statusStrips = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.status = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.statusStrips.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -119,9 +123,9 @@
             // richTextBox1
             // 
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.richTextBox1.Location = new System.Drawing.Point(39, 333);
+            this.richTextBox1.Location = new System.Drawing.Point(39, 220);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(838, 360);
+            this.richTextBox1.Size = new System.Drawing.Size(838, 438);
             this.richTextBox1.TabIndex = 15;
             this.richTextBox1.Text = "";
             // 
@@ -139,7 +143,7 @@
             // buttonExit
             // 
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonExit.Location = new System.Drawing.Point(445, 699);
+            this.buttonExit.Location = new System.Drawing.Point(448, 686);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(95, 33);
             this.buttonExit.TabIndex = 9;
@@ -175,16 +179,57 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Interface:";
             // 
-            // buttonStartServer
+            // panel1
             // 
-            this.buttonStartServer.BackColor = System.Drawing.Color.LightBlue;
-            this.buttonStartServer.Location = new System.Drawing.Point(29, 147);
-            this.buttonStartServer.Name = "buttonStartServer";
-            this.buttonStartServer.Size = new System.Drawing.Size(151, 38);
-            this.buttonStartServer.TabIndex = 1;
-            this.buttonStartServer.Text = "START SERVER";
-            this.buttonStartServer.UseVisualStyleBackColor = false;
-            this.buttonStartServer.Click += new System.EventHandler(this.buttonStartServer_Click);
+            this.panel1.BackColor = System.Drawing.Color.Lavender;
+            this.panel1.Controls.Add(this.radioButton2);
+            this.panel1.Controls.Add(this.radioButton1);
+            this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.panel1.Location = new System.Drawing.Point(29, 64);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(156, 63);
+            this.panel1.TabIndex = 4;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(21, 4);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(68, 28);
+            this.radioButton2.TabIndex = 0;
+            this.radioButton2.Text = "9600";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Checked = true;
+            this.radioButton1.Location = new System.Drawing.Point(21, 34);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(88, 28);
+            this.radioButton1.TabIndex = 0;
+            this.radioButton1.TabStop = true;
+            this.radioButton1.Text = "115200";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // comboBoxComport
+            // 
+            this.comboBoxComport.FormattingEnabled = true;
+            this.comboBoxComport.Location = new System.Drawing.Point(191, 64);
+            this.comboBoxComport.Name = "comboBoxComport";
+            this.comboBoxComport.Size = new System.Drawing.Size(138, 28);
+            this.comboBoxComport.TabIndex = 3;
+            // 
+            // radioButtonComport
+            // 
+            this.radioButtonComport.AutoSize = true;
+            this.radioButtonComport.Location = new System.Drawing.Point(191, 25);
+            this.radioButtonComport.Name = "radioButtonComport";
+            this.radioButtonComport.Size = new System.Drawing.Size(110, 24);
+            this.radioButtonComport.TabIndex = 2;
+            this.radioButtonComport.Text = "COM PORT";
+            this.radioButtonComport.UseVisualStyleBackColor = true;
+            this.radioButtonComport.Click += new System.EventHandler(this.radioButtonComport_Click);
             // 
             // radioButtonWiFi
             // 
@@ -198,25 +243,6 @@
             this.radioButtonWiFi.Text = "WiFi";
             this.radioButtonWiFi.UseVisualStyleBackColor = true;
             // 
-            // radioButtonComport
-            // 
-            this.radioButtonComport.AutoSize = true;
-            this.radioButtonComport.Location = new System.Drawing.Point(191, 25);
-            this.radioButtonComport.Name = "radioButtonComport";
-            this.radioButtonComport.Size = new System.Drawing.Size(110, 24);
-            this.radioButtonComport.TabIndex = 2;
-            this.radioButtonComport.Text = "COM PORT";
-            this.radioButtonComport.UseVisualStyleBackColor = true;
-            this.radioButtonComport.Click += new System.EventHandler(this.radioButtonComport_Click);
-            // 
-            // comboBoxComport
-            // 
-            this.comboBoxComport.FormattingEnabled = true;
-            this.comboBoxComport.Location = new System.Drawing.Point(191, 64);
-            this.comboBoxComport.Name = "comboBoxComport";
-            this.comboBoxComport.Size = new System.Drawing.Size(138, 28);
-            this.comboBoxComport.TabIndex = 3;
-            // 
             // buttonOpenCom
             // 
             this.buttonOpenCom.BackColor = System.Drawing.Color.LightGreen;
@@ -229,38 +255,38 @@
             this.buttonOpenCom.UseVisualStyleBackColor = false;
             this.buttonOpenCom.Click += new System.EventHandler(this.buttonOpenCom_Click);
             // 
-            // panel1
+            // buttonStartServer
             // 
-            this.panel1.BackColor = System.Drawing.Color.Lavender;
-            this.panel1.Controls.Add(this.radioButton2);
-            this.panel1.Controls.Add(this.radioButton1);
-            this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.panel1.Location = new System.Drawing.Point(29, 64);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(156, 63);
-            this.panel1.TabIndex = 4;
+            this.buttonStartServer.BackColor = System.Drawing.Color.LightBlue;
+            this.buttonStartServer.Location = new System.Drawing.Point(29, 147);
+            this.buttonStartServer.Name = "buttonStartServer";
+            this.buttonStartServer.Size = new System.Drawing.Size(151, 38);
+            this.buttonStartServer.TabIndex = 1;
+            this.buttonStartServer.Text = "START SERVER";
+            this.buttonStartServer.UseVisualStyleBackColor = false;
+            this.buttonStartServer.Click += new System.EventHandler(this.buttonStartServer_Click);
             // 
-            // radioButton1
+            // statusStrips
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(21, 34);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(88, 28);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.Text = "115200";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.statusStrips.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1,
+            this.status});
+            this.statusStrips.Location = new System.Drawing.Point(0, 722);
+            this.statusStrips.Name = "statusStrips";
+            this.statusStrips.Size = new System.Drawing.Size(916, 22);
+            this.statusStrips.TabIndex = 17;
+            this.statusStrips.Text = "Status:";
             // 
-            // radioButton2
+            // toolStripStatusLabel1
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Checked = true;
-            this.radioButton2.Location = new System.Drawing.Point(21, 4);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(68, 28);
-            this.radioButton2.TabIndex = 0;
-            this.radioButton2.TabStop = true;
-            this.radioButton2.Text = "9600";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(42, 17);
+            this.toolStripStatusLabel1.Text = "Status:";
+            // 
+            // status
+            // 
+            this.status.Name = "status";
+            this.status.Size = new System.Drawing.Size(0, 17);
             // 
             // Form1
             // 
@@ -268,6 +294,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(916, 744);
             this.ControlBox = false;
+            this.Controls.Add(this.statusStrips);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonClear);
@@ -287,6 +314,8 @@
             this.groupBox1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.statusStrips.ResumeLayout(false);
+            this.statusStrips.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -314,6 +343,9 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.StatusStrip statusStrips;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.ToolStripStatusLabel status;
     }
 }
 

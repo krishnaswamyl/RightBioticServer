@@ -24,12 +24,12 @@ namespace xbitsServer
         public static int PortNo = 3000;
         public static Thread serverThread;
         public static Thread comportThread;
-        public SerialPort SP1;
+        static SerialPort SP1;
+        static AutoResetEvent waitserial;
         private static readonly Object _Lock = new Object();
         bool read_timeout_flag = false;
         String[] months = { "ETC", "Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec" };
-        public StateObject state2;
-        public StateObject comState;
+        public StateObject state2;        
         public volatile bool stopServer = false;
         public volatile bool stopComServer = false;
         String content = String.Empty;
@@ -50,6 +50,8 @@ namespace xbitsServer
         {
             InitializeComponent();
             SP1 = new SerialPort();
+            SP1.DataReceived += new SerialDataReceivedEventHandler(this.SP1_DataReceived);
+            waitserial = new AutoResetEvent(false);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -205,6 +207,7 @@ namespace xbitsServer
                     // Not all data received. Get more.  
                     handler.BeginReceive(state2.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReadCallback), state2);
+
                 }
             }
         }
@@ -459,11 +462,26 @@ namespace xbitsServer
             }
             else
             {
+                SP1.DataReceived -= new SerialDataReceivedEventHandler(this.SP1_DataReceived);
                 SP1.Dispose();
                 SP1.Close();
                 buttonOpenCom.Text = "Open Com Port";
                 buttonOpenCom.BackColor = Color.LightGreen; 
             }
+        }
+        private String readComport(int timeout)
+        {
+            String res = String.Empty;
+            SP1.ReadTimeout = timeout;
+            try
+            {
+                res = SP1.ReadLine();
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+                return "N";
+            }
+            return res;
         }
 
         private void startListeningonComport()
@@ -471,42 +489,67 @@ namespace xbitsServer
             
             stopComServer = true;
             char[] split = { ' ' };
-            SP1.ReadTimeout = -1;
+            
             String[] res;
+            waitserial.Reset();
             while (stopComServer)
             {
                 
-                int count=0;                
-                String incom = SP1.ReadLine();
-                if(incom.Length > 3)
+                int count=0;
+                waitserial.WaitOne();
+                String incom = readComport(2000);
+                if (incom.Equals("N"))
+                {
+                    continue;
+                }
+                if (incom.Length > 3)
                 {
                     res = incom.Split(split);
                 }
                 else
                 {
                     SP1.DiscardInBuffer();
+                    waitserial.Reset();
                     continue;
                 }
                 try
                 {
-                    count = int.Parse(res[0]);
+                    count = int.Parse(res[1]);
                     SP1.WriteLine("A");
                 }catch(Exception)
                 {
                     // To Do code here
                     continue;
                 }
+                StringBuilder sb = new StringBuilder();
+                waitserial.Reset();
                 for( int sin=0; sin < count; sin++)
                 {
-                    comState.sb.Append(SP1.ReadLine());
+                    waitserial.WaitOne();
+                    sb.Append(readComport(1000)+"\n");
                 }
                 SP1.WriteLine("A");
                 content = String.Empty;
-                content = comState.sb.ToString();
+                content = sb.ToString();
                 WriteStringtoFile(content);
                 richTextBox1.Invoke(new Action(() => { richTextBox1.AppendText("\nReceived Data File From ComPort: "); }));
 
             }
+        }
+        private void SP1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            int bytestoread = 0;
+            //Thread.Sleep(10);
+            if (bytestoread > 0)
+            {
+                Invoke(new Action(() =>
+                {                    
+                    toolStripStatusLabel1.Text = "Data received..";
+
+                }));
+
+            }
+            waitserial.Set();
         }
     }
 }
