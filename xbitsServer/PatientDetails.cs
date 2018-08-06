@@ -388,21 +388,21 @@ namespace xbitsServer
 
             para.Add(new Chunk("Sample"));
             para.Add(Chunk.TABBING);
-            para.Add(new Chunk(":"));
+            para.Add(new Chunk(": "));
             para.Add(new Chunk("Urine\n"));
             para.Add(new Chunk("Test"));
             para.Add(Chunk.TABBING);
-            para.Add(new Chunk(":"));
+            para.Add(new Chunk(": "));
             para.Add(new Chunk("AST - (Antibiotic Sensitivity Test)\n"));
 
             para.Add(new Chunk("Organism Name"));
             para.Add(Chunk.TABBING);
-            para.Add(new Chunk(":"));
+            para.Add(new Chunk(": "));
             para.Add(new Chunk(lines[2] + "\n"));
            
             para.Add(new Chunk("Volume"));
             para.Add(Chunk.TABBING);
-            para.Add(new Chunk(":"));
+            para.Add(new Chunk(": "));
             para.Add(new Chunk(lines[3]+ "\n"));
             document.Add(para);
 
