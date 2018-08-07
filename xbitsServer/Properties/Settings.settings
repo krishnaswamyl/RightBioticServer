@@ -6,7 +6,7 @@
       <Value Profile="(Default)">C:\</Value>
     </Setting>
     <Setting Name="Top" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">150</Value>
+      <Value Profile="(Default)">75</Value>
     </Setting>
     <Setting Name="Left" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">50</Value>
