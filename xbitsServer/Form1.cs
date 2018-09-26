@@ -368,7 +368,7 @@ namespace xbitsServer
         {
             lock (_Lock)
             {
-                string temp = null;
+                //string temp = null;
 
                 read_timeout_flag = false;
                 if (SP1.IsOpen == false)
