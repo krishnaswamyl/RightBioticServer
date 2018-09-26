@@ -51,7 +51,9 @@
             this.label10 = new System.Windows.Forms.Label();
             this.comboBoxSex = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
+            this.textBoxRepDoc = new System.Windows.Forms.TextBox();
             this.textBoxDocName = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.textBoxPname = new System.Windows.Forms.TextBox();
@@ -63,9 +65,6 @@
             this.textBoxPassword = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.textBoxToemail = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.textBoxRepDoc = new System.Windows.Forms.TextBox();
-            this.richTextBoxReport = new System.Windows.Forms.RichTextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -74,10 +73,10 @@
             // buttonSelect
             // 
             this.buttonSelect.BackColor = System.Drawing.SystemColors.Info;
-            this.buttonSelect.Location = new System.Drawing.Point(451, 760);
+            this.buttonSelect.Location = new System.Drawing.Point(466, 483);
             this.buttonSelect.Name = "buttonSelect";
             this.buttonSelect.Size = new System.Drawing.Size(138, 36);
-            this.buttonSelect.TabIndex = 16;
+            this.buttonSelect.TabIndex = 12;
             this.buttonSelect.Text = "Select File to Print";
             this.buttonSelect.UseVisualStyleBackColor = false;
             this.buttonSelect.Click += new System.EventHandler(this.buttonSelect_Click);
@@ -86,10 +85,10 @@
             // 
             this.buttonExit.BackColor = System.Drawing.Color.Salmon;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonExit.Location = new System.Drawing.Point(754, 760);
+            this.buttonExit.Location = new System.Drawing.Point(769, 483);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(89, 36);
-            this.buttonExit.TabIndex = 17;
+            this.buttonExit.TabIndex = 14;
             this.buttonExit.Text = "Exit";
             this.buttonExit.UseVisualStyleBackColor = false;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
@@ -99,8 +98,8 @@
             this.richTextBox1.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.Location = new System.Drawing.Point(869, 12);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(340, 415);
-            this.richTextBox1.TabIndex = 8;
+            this.richTextBox1.Size = new System.Drawing.Size(253, 415);
+            this.richTextBox1.TabIndex = 15;
             this.richTextBox1.Text = "\n";
             // 
             // label7
@@ -136,7 +135,7 @@
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(856, 355);
-            this.panel1.TabIndex = 9;
+            this.panel1.TabIndex = 0;
             // 
             // groupBox1
             // 
@@ -154,7 +153,7 @@
             this.groupBox1.Location = new System.Drawing.Point(649, 6);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(195, 188);
-            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabIndex = 0;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "PDF Marging Settings";
             // 
@@ -163,7 +162,7 @@
             this.buttonMarging.Location = new System.Drawing.Point(88, 146);
             this.buttonMarging.Name = "buttonMarging";
             this.buttonMarging.Size = new System.Drawing.Size(75, 23);
-            this.buttonMarging.TabIndex = 15;
+            this.buttonMarging.TabIndex = 20;
             this.buttonMarging.Text = "Save";
             this.buttonMarging.UseVisualStyleBackColor = true;
             this.buttonMarging.Click += new System.EventHandler(this.buttonMargin_Click);
@@ -173,28 +172,28 @@
             this.textBoxBott.Location = new System.Drawing.Point(98, 118);
             this.textBoxBott.Name = "textBoxBott";
             this.textBoxBott.Size = new System.Drawing.Size(57, 22);
-            this.textBoxBott.TabIndex = 14;
+            this.textBoxBott.TabIndex = 19;
             // 
             // textBoxRight
             // 
             this.textBoxRight.Location = new System.Drawing.Point(98, 90);
             this.textBoxRight.Name = "textBoxRight";
             this.textBoxRight.Size = new System.Drawing.Size(57, 22);
-            this.textBoxRight.TabIndex = 13;
+            this.textBoxRight.TabIndex = 18;
             // 
             // textBoxLeft
             // 
             this.textBoxLeft.Location = new System.Drawing.Point(98, 62);
             this.textBoxLeft.Name = "textBoxLeft";
             this.textBoxLeft.Size = new System.Drawing.Size(57, 22);
-            this.textBoxLeft.TabIndex = 12;
+            this.textBoxLeft.TabIndex = 17;
             // 
             // textBoxTop
             // 
             this.textBoxTop.Location = new System.Drawing.Point(98, 34);
             this.textBoxTop.Name = "textBoxTop";
             this.textBoxTop.Size = new System.Drawing.Size(57, 22);
-            this.textBoxTop.TabIndex = 11;
+            this.textBoxTop.TabIndex = 16;
             // 
             // label1
             // 
@@ -315,6 +314,16 @@
             this.label11.TabIndex = 1;
             this.label11.Text = "Select Sex:";
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.Location = new System.Drawing.Point(3, 295);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(337, 24);
+            this.label15.TabIndex = 1;
+            this.label15.Text = "Report Prepared by Doctor\'s Name: Dr.";
+            // 
             // label12
             // 
             this.label12.AutoSize = true;
@@ -324,6 +333,15 @@
             this.label12.Size = new System.Drawing.Size(232, 24);
             this.label12.TabIndex = 1;
             this.label12.Text = "Referal Doctor\'s Name: Dr.";
+            // 
+            // textBoxRepDoc
+            // 
+            this.textBoxRepDoc.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxRepDoc.Location = new System.Drawing.Point(346, 290);
+            this.textBoxRepDoc.Name = "textBoxRepDoc";
+            this.textBoxRepDoc.Size = new System.Drawing.Size(498, 29);
+            this.textBoxRepDoc.TabIndex = 7;
+            this.textBoxRepDoc.Text = "Doctor Name";
             // 
             // textBoxDocName
             // 
@@ -356,10 +374,10 @@
             // buttonPrint
             // 
             this.buttonPrint.BackColor = System.Drawing.Color.OliveDrab;
-            this.buttonPrint.Location = new System.Drawing.Point(595, 760);
+            this.buttonPrint.Location = new System.Drawing.Point(610, 483);
             this.buttonPrint.Name = "buttonPrint";
             this.buttonPrint.Size = new System.Drawing.Size(138, 36);
-            this.buttonPrint.TabIndex = 6;
+            this.buttonPrint.TabIndex = 13;
             this.buttonPrint.Text = "PRINT";
             this.buttonPrint.UseVisualStyleBackColor = false;
             this.buttonPrint.Click += new System.EventHandler(this.buttonPrint_Click);
@@ -367,10 +385,10 @@
             // buttonEmail
             // 
             this.buttonEmail.BackColor = System.Drawing.SystemColors.Info;
-            this.buttonEmail.Location = new System.Drawing.Point(307, 760);
+            this.buttonEmail.Location = new System.Drawing.Point(322, 483);
             this.buttonEmail.Name = "buttonEmail";
             this.buttonEmail.Size = new System.Drawing.Size(138, 36);
-            this.buttonEmail.TabIndex = 10;
+            this.buttonEmail.TabIndex = 11;
             this.buttonEmail.Text = "Send by E-mail";
             this.buttonEmail.UseVisualStyleBackColor = false;
             this.buttonEmail.Click += new System.EventHandler(this.buttonEmail_Click);
@@ -391,7 +409,7 @@
             this.textBoxUserName.Location = new System.Drawing.Point(157, 382);
             this.textBoxUserName.Name = "textBoxUserName";
             this.textBoxUserName.Size = new System.Drawing.Size(257, 23);
-            this.textBoxUserName.TabIndex = 7;
+            this.textBoxUserName.TabIndex = 8;
             this.textBoxUserName.Text = "abhi@abhisystems.com";
             // 
             // label4
@@ -411,7 +429,7 @@
             this.textBoxPassword.Name = "textBoxPassword";
             this.textBoxPassword.PasswordChar = '*';
             this.textBoxPassword.Size = new System.Drawing.Size(257, 23);
-            this.textBoxPassword.TabIndex = 9;
+            this.textBoxPassword.TabIndex = 10;
             // 
             // label14
             // 
@@ -429,36 +447,8 @@
             this.textBoxToemail.Location = new System.Drawing.Point(583, 382);
             this.textBoxToemail.Name = "textBoxToemail";
             this.textBoxToemail.Size = new System.Drawing.Size(257, 23);
-            this.textBoxToemail.TabIndex = 8;
+            this.textBoxToemail.TabIndex = 9;
             this.textBoxToemail.Text = "krishnaswamy@microlab.co.in";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(3, 295);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(337, 24);
-            this.label15.TabIndex = 1;
-            this.label15.Text = "Report Prepared by Doctor\'s Name: Dr.";
-            // 
-            // textBoxRepDoc
-            // 
-            this.textBoxRepDoc.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxRepDoc.Location = new System.Drawing.Point(346, 290);
-            this.textBoxRepDoc.Name = "textBoxRepDoc";
-            this.textBoxRepDoc.Size = new System.Drawing.Size(498, 29);
-            this.textBoxRepDoc.TabIndex = 6;
-            this.textBoxRepDoc.Text = "Doctor Name";
-            // 
-            // richTextBoxReport
-            // 
-            this.richTextBoxReport.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F);
-            this.richTextBoxReport.Location = new System.Drawing.Point(12, 468);
-            this.richTextBoxReport.Name = "richTextBoxReport";
-            this.richTextBoxReport.Size = new System.Drawing.Size(1197, 269);
-            this.richTextBoxReport.TabIndex = 18;
-            this.richTextBoxReport.Text = "Please type your observations and report here.";
             // 
             // label16
             // 
@@ -474,8 +464,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1221, 808);
-            this.Controls.Add(this.richTextBoxReport);
+            this.ClientSize = new System.Drawing.Size(1137, 529);
             this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.textBoxToemail);
             this.Controls.Add(this.textBoxUserName);
@@ -540,7 +529,6 @@
         private System.Windows.Forms.TextBox textBoxToemail;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox textBoxRepDoc;
-        private System.Windows.Forms.RichTextBox richTextBoxReport;
         private System.Windows.Forms.Label label16;
     }
 }
