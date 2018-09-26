@@ -410,7 +410,7 @@
             this.textBoxUserName.Name = "textBoxUserName";
             this.textBoxUserName.Size = new System.Drawing.Size(257, 23);
             this.textBoxUserName.TabIndex = 8;
-            this.textBoxUserName.Text = "abhi@abhisystems.com";
+            this.textBoxUserName.Text = "xyz@gmail.com";
             // 
             // label4
             // 
@@ -448,7 +448,7 @@
             this.textBoxToemail.Name = "textBoxToemail";
             this.textBoxToemail.Size = new System.Drawing.Size(257, 23);
             this.textBoxToemail.TabIndex = 9;
-            this.textBoxToemail.Text = "krishnaswamy@microlab.co.in";
+            this.textBoxToemail.Text = "toemail@gmail.como";
             // 
             // label16
             // 
