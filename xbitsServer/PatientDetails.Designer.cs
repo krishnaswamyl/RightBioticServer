@@ -98,7 +98,7 @@
             this.richTextBox1.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox1.Location = new System.Drawing.Point(869, 12);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(253, 415);
+            this.richTextBox1.Size = new System.Drawing.Size(396, 415);
             this.richTextBox1.TabIndex = 15;
             this.richTextBox1.Text = "\n";
             // 
@@ -464,7 +464,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1137, 529);
+            this.ClientSize = new System.Drawing.Size(1278, 529);
             this.Controls.Add(this.textBoxPassword);
             this.Controls.Add(this.textBoxToemail);
             this.Controls.Add(this.textBoxUserName);
