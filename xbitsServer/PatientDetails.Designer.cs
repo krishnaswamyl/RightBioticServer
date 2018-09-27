@@ -448,7 +448,7 @@
             this.textBoxToemail.Name = "textBoxToemail";
             this.textBoxToemail.Size = new System.Drawing.Size(257, 23);
             this.textBoxToemail.TabIndex = 9;
-            this.textBoxToemail.Text = "toemail@gmail.como";
+            this.textBoxToemail.Text = "toemail@gmail.com";
             // 
             // label16
             // 
