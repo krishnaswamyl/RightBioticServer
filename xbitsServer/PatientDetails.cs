@@ -162,6 +162,10 @@ namespace xbitsServer
             table.HorizontalAlignment = 0;
             BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             iTextSharp.text.Font font = new iTextSharp.text.Font(bf, 16, iTextSharp.text.Font.BOLD);
+            iTextSharp.text.Font fontRed = new iTextSharp.text.Font(bf, 16, iTextSharp.text.Font.BOLD, BaseColor.RED);
+            iTextSharp.text.Font fontGreen = new iTextSharp.text.Font(bf, 16, iTextSharp.text.Font.BOLD, BaseColor.GREEN);
+
+            
 
             PdfPCell cell = new PdfPCell(new Phrase("Laboratary Report", font));
             cell.Colspan = 4;
@@ -290,8 +294,21 @@ namespace xbitsServer
 
                 pc.HorizontalAlignment = 0;
                 table.AddCell(pc);
+                Phrase tr = null;
+                switch (antres[1])
+                {
+                    case "I":
+                        tr = new Phrase(antres[1], font);
+                        break;
+
+                    case "R":
+                        tr = new Phrase(antres[1], fontRed);
+                        break;
+                    case "S":
+                        tr = new Phrase(antres[1], fontGreen);
+                        break;
+                }             
                 
-                Phrase tr = new Phrase(antres[1], font);
                 pc = new PdfPCell(tr);
                 pc.HorizontalAlignment = 1;
                 table.AddCell(pc);
@@ -317,7 +334,21 @@ namespace xbitsServer
                     tr = new Phrase(" ", font);
                 }else
                 {
-                    tr = new Phrase(antres[1], font);
+                    
+                    switch (antres[1])
+                    {
+                        case "I":
+                            tr = new Phrase(antres[1], font);
+                            break;
+
+                        case "R":
+                            tr = new Phrase(antres[1], fontRed);
+                            break;
+                        case "S":
+                            tr = new Phrase(antres[1], fontGreen);
+                            break;
+                    }
+                    //tr = new Phrase(antres[1], font);
                 }
                
                 pc = new PdfPCell(tr);
