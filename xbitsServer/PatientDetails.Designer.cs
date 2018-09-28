@@ -318,11 +318,11 @@
             // 
             this.label15.AutoSize = true;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(3, 295);
+            this.label15.Location = new System.Drawing.Point(144, 295);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(337, 24);
+            this.label15.Size = new System.Drawing.Size(196, 24);
             this.label15.TabIndex = 1;
-            this.label15.Text = "Report Prepared by Doctor\'s Name: Dr.";
+            this.label15.Text = "Dept., of Pathology Dr.";
             // 
             // label12
             // 
