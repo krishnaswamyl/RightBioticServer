@@ -45,7 +45,9 @@ namespace xbitsServer
             public StringBuilder sb = new StringBuilder();
         }
         public static ManualResetEvent allDone = new ManualResetEvent(false);
-       
+        public static ManualResetEvent disconnectDone = new ManualResetEvent(false);
+
+
         public Form1()
         {
             InitializeComponent();
@@ -63,8 +65,8 @@ namespace xbitsServer
                 comboBoxComport.Items.Add(portName);                  //<-- Adds Ports to combobox
                 con++;
             }if(con > 0) { comboBoxComport.SelectedIndex = 0; }
-            
-            
+
+            linkLabelPath.Text = Properties.Settings.Default.Path;
         }
 
         private void buttonChooseFolder_Click(object sender, EventArgs e)
@@ -131,15 +133,18 @@ namespace xbitsServer
                 listener.Bind(localEndPoint);
                 listener.Listen(100);
                 stopServer = false;
+                
                 while (true)
                 {
                     // Set the event to nonsignaled state.  
                     allDone.Reset();
+                    
                     // Start an asynchronous socket to listen for connections.  
                     listener.BeginAccept(new AsyncCallback(AcceptCallback),listener);
                     // Wait until a connection is made before continuing.  
                     Invoke(new Action(() =>
                     { richTextBox1.AppendText("\nWaiting for a connection...");}));
+
                     allDone.WaitOne();
                     if (stopServer)
                     {
@@ -242,6 +247,7 @@ namespace xbitsServer
                 Console.WriteLine(e.ToString());
             }
         }
+
         private  void WriteStringtoFile(String st)
         {
            
@@ -298,7 +304,7 @@ namespace xbitsServer
 
             int year = dt.Year;
             String path = Properties.Settings.Default.Path;
-            path += "\\RightBiotic\\"+year.ToString();
+            path += "RightBiotic\\"+year.ToString();
             path += "\\"+months[dt.Month];
             try
             {
@@ -320,7 +326,8 @@ namespace xbitsServer
 
         private void buttonStartServer_Click(object sender, EventArgs e)
         {
-            if(radioButtonWiFi.Checked)
+            
+            if (radioButtonWiFi.Checked)
             {
                 MessageBox.Show("WiFi checked");
                 linkLabelPath.Text = Properties.Settings.Default.Path;
@@ -332,6 +339,7 @@ namespace xbitsServer
                     return;
                 }
                 labelIPadd.Text = ipAddress.ToString();
+                richTextBox1.Clear();
                 richTextBox1.AppendText("Server is up and Listening on:" + labelIPadd.Text.ToString() + ":" + PortNo);
                 buttonStartServer.Enabled = false;
                 serverThread = new Thread(StartListening);
@@ -346,9 +354,13 @@ namespace xbitsServer
                     return;
                 }
                 buttonStartServer.Enabled = false;
+                richTextBox1.Clear();
+                richTextBox1.AppendText("Server is up and Listening Com Port:");
                 comportThread = new Thread(startListeningonComport);
                 comportThread.Start();
             }
+            
+            
         }
 
         private void radioButtonComport_Click(object sender, EventArgs e)
@@ -550,6 +562,21 @@ namespace xbitsServer
 
             }
             waitserial.Set();
+        }
+
+        private void comboBoxComport_MouseEnter(object sender, EventArgs e)
+        {
+            int con = 0;
+            string[] portNames = SerialPort.GetPortNames();     //<-- Reads all available comPorts
+            comboBoxComport.Items.Clear();
+            
+            foreach (var portName in portNames)
+            {
+                comboBoxComport.Items.Add(portName);                  //<-- Adds Ports to combobox
+                con++;
+            }
+            
+
         }
     }
 }

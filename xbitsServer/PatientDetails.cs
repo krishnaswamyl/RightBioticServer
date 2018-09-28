@@ -140,7 +140,8 @@ namespace xbitsServer
             DateTime dt = dateTimePicker1.Value;
 
             Document document = new Document(PageSize.A4, Left, Right, Top, Bottom);
-            F_name = fileName.TrimEnd(trim) + ".pdf";
+            String[] finame = fileName.Split(trim);
+            F_name = finame[0] + ".pdf";
             try
             {
                 PdfWriter writer = PdfWriter.GetInstance(document, new FileStream(F_name, FileMode.Create));
