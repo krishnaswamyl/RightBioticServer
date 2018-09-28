@@ -90,10 +90,10 @@
             // linkLabelPath
             // 
             this.linkLabelPath.AutoSize = true;
-            this.linkLabelPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabelPath.Location = new System.Drawing.Point(135, 141);
+            this.linkLabelPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabelPath.Location = new System.Drawing.Point(156, 141);
             this.linkLabelPath.Name = "linkLabelPath";
-            this.linkLabelPath.Size = new System.Drawing.Size(27, 16);
+            this.linkLabelPath.Size = new System.Drawing.Size(31, 20);
             this.linkLabelPath.TabIndex = 7;
             this.linkLabelPath.TabStop = true;
             this.linkLabelPath.Text = "C:\\";
@@ -116,9 +116,9 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(12, 138);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(125, 20);
+            this.label4.Size = new System.Drawing.Size(138, 20);
             this.label4.TabIndex = 2;
-            this.label4.Text = "Selected Folder:";
+            this.label4.Text = "View Stored Data:";
             // 
             // richTextBox1
             // 
@@ -219,6 +219,7 @@
             this.comboBoxComport.Name = "comboBoxComport";
             this.comboBoxComport.Size = new System.Drawing.Size(138, 28);
             this.comboBoxComport.TabIndex = 3;
+            this.comboBoxComport.MouseEnter += new System.EventHandler(this.comboBoxComport_MouseEnter);
             // 
             // radioButtonComport
             // 
@@ -273,7 +274,7 @@
             this.status});
             this.statusStrips.Location = new System.Drawing.Point(0, 722);
             this.statusStrips.Name = "statusStrips";
-            this.statusStrips.Size = new System.Drawing.Size(916, 22);
+            this.statusStrips.Size = new System.Drawing.Size(907, 22);
             this.statusStrips.TabIndex = 17;
             this.statusStrips.Text = "Status:";
             // 
@@ -292,7 +293,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(916, 744);
+            this.ClientSize = new System.Drawing.Size(907, 744);
             this.ControlBox = false;
             this.Controls.Add(this.statusStrips);
             this.Controls.Add(this.groupBox1);
