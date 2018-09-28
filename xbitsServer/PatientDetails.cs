@@ -416,7 +416,8 @@ namespace xbitsServer
             para.Add(new Chunk("DEPARTMENT OF PATHOLOGY"));
             para.Add(new Chunk("\n"));
             para.Add(new Chunk("\n"));
-            para.Add(new Chunk("Dr. ____________________"));
+            //para.Add(new Chunk("Dr. ____________________"));
+            para.Add(new Chunk("Dr."+textBoxRepDoc.Text));
             para.Add(new Chunk("\n"));
             para.Add(new Chunk("\n"));
             para.Add(new Chunk("\n"));
