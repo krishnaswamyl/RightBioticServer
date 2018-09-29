@@ -49,7 +49,7 @@ namespace xbitsServer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
         public int Left {
             get {
                 return ((int)(this["Left"]));
@@ -61,7 +61,7 @@ namespace xbitsServer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
+        [global::System.Configuration.DefaultSettingValueAttribute("35")]
         public int Right {
             get {
                 return ((int)(this["Right"]));
@@ -104,6 +104,30 @@ namespace xbitsServer.Properties {
             }
             set {
                 this["PassWord"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool radiobutton_Wifi {
+            get {
+                return ((bool)(this["radiobutton_Wifi"]));
+            }
+            set {
+                this["radiobutton_Wifi"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool radiobutton_com {
+            get {
+                return ((bool)(this["radiobutton_com"]));
+            }
+            set {
+                this["radiobutton_com"] = value;
             }
         }
     }

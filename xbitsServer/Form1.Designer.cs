@@ -51,6 +51,7 @@
             this.statusStrips = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.status = new System.Windows.Forms.ToolStripStatusLabel();
+            this.buttonEnumComport = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.statusStrips.SuspendLayout();
@@ -123,9 +124,9 @@
             // richTextBox1
             // 
             this.richTextBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.richTextBox1.Location = new System.Drawing.Point(39, 220);
+            this.richTextBox1.Location = new System.Drawing.Point(39, 271);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(838, 438);
+            this.richTextBox1.Size = new System.Drawing.Size(838, 387);
             this.richTextBox1.TabIndex = 15;
             this.richTextBox1.Text = "";
             // 
@@ -142,13 +143,14 @@
             // 
             // buttonExit
             // 
+            this.buttonExit.BackColor = System.Drawing.Color.Tomato;
             this.buttonExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonExit.Location = new System.Drawing.Point(448, 686);
+            this.buttonExit.Location = new System.Drawing.Point(376, 686);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(95, 33);
             this.buttonExit.TabIndex = 9;
             this.buttonExit.Text = "E&xit";
-            this.buttonExit.UseVisualStyleBackColor = true;
+            this.buttonExit.UseVisualStyleBackColor = false;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
             // buttonPrint
@@ -165,6 +167,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Info;
+            this.groupBox1.Controls.Add(this.buttonEnumComport);
             this.groupBox1.Controls.Add(this.panel1);
             this.groupBox1.Controls.Add(this.comboBoxComport);
             this.groupBox1.Controls.Add(this.radioButtonComport);
@@ -174,7 +177,7 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.groupBox1.Location = new System.Drawing.Point(505, 20);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(372, 194);
+            this.groupBox1.Size = new System.Drawing.Size(372, 245);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Interface:";
@@ -185,7 +188,7 @@
             this.panel1.Controls.Add(this.radioButton2);
             this.panel1.Controls.Add(this.radioButton1);
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.panel1.Location = new System.Drawing.Point(29, 64);
+            this.panel1.Location = new System.Drawing.Point(191, 118);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(156, 63);
             this.panel1.TabIndex = 4;
@@ -215,22 +218,21 @@
             // comboBoxComport
             // 
             this.comboBoxComport.FormattingEnabled = true;
-            this.comboBoxComport.Location = new System.Drawing.Point(191, 64);
+            this.comboBoxComport.Location = new System.Drawing.Point(191, 21);
             this.comboBoxComport.Name = "comboBoxComport";
-            this.comboBoxComport.Size = new System.Drawing.Size(138, 28);
+            this.comboBoxComport.Size = new System.Drawing.Size(151, 28);
             this.comboBoxComport.TabIndex = 3;
-            this.comboBoxComport.MouseEnter += new System.EventHandler(this.comboBoxComport_MouseEnter);
             // 
             // radioButtonComport
             // 
             this.radioButtonComport.AutoSize = true;
-            this.radioButtonComport.Location = new System.Drawing.Point(191, 25);
+            this.radioButtonComport.Location = new System.Drawing.Point(29, 75);
             this.radioButtonComport.Name = "radioButtonComport";
             this.radioButtonComport.Size = new System.Drawing.Size(110, 24);
             this.radioButtonComport.TabIndex = 2;
             this.radioButtonComport.Text = "COM PORT";
             this.radioButtonComport.UseVisualStyleBackColor = true;
-            this.radioButtonComport.Click += new System.EventHandler(this.radioButtonComport_Click);
+            this.radioButtonComport.Click += new System.EventHandler(this.radioButtonClicked);
             // 
             // radioButtonWiFi
             // 
@@ -243,12 +245,13 @@
             this.radioButtonWiFi.TabStop = true;
             this.radioButtonWiFi.Text = "WiFi";
             this.radioButtonWiFi.UseVisualStyleBackColor = true;
+            this.radioButtonWiFi.Click += new System.EventHandler(this.radioButtonClicked);
             // 
             // buttonOpenCom
             // 
             this.buttonOpenCom.BackColor = System.Drawing.Color.LightGreen;
             this.buttonOpenCom.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonOpenCom.Location = new System.Drawing.Point(191, 147);
+            this.buttonOpenCom.Location = new System.Drawing.Point(191, 189);
             this.buttonOpenCom.Name = "buttonOpenCom";
             this.buttonOpenCom.Size = new System.Drawing.Size(151, 38);
             this.buttonOpenCom.TabIndex = 1;
@@ -259,7 +262,7 @@
             // buttonStartServer
             // 
             this.buttonStartServer.BackColor = System.Drawing.Color.LightBlue;
-            this.buttonStartServer.Location = new System.Drawing.Point(29, 147);
+            this.buttonStartServer.Location = new System.Drawing.Point(29, 189);
             this.buttonStartServer.Name = "buttonStartServer";
             this.buttonStartServer.Size = new System.Drawing.Size(151, 38);
             this.buttonStartServer.TabIndex = 1;
@@ -288,6 +291,16 @@
             // 
             this.status.Name = "status";
             this.status.Size = new System.Drawing.Size(0, 17);
+            // 
+            // buttonEnumComport
+            // 
+            this.buttonEnumComport.Location = new System.Drawing.Point(191, 75);
+            this.buttonEnumComport.Name = "buttonEnumComport";
+            this.buttonEnumComport.Size = new System.Drawing.Size(156, 31);
+            this.buttonEnumComport.TabIndex = 5;
+            this.buttonEnumComport.Text = "Enum Com Port";
+            this.buttonEnumComport.UseVisualStyleBackColor = true;
+            this.buttonEnumComport.Click += new System.EventHandler(this.buttonEnumComport_Click);
             // 
             // Form1
             // 
@@ -347,6 +360,7 @@
         private System.Windows.Forms.StatusStrip statusStrips;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel status;
+        private System.Windows.Forms.Button buttonEnumComport;
     }
 }
 
