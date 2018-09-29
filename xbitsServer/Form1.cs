@@ -67,6 +67,8 @@ namespace xbitsServer
             }if(con > 0) { comboBoxComport.SelectedIndex = 0; }
 
             linkLabelPath.Text = Properties.Settings.Default.Path;
+            if (Properties.Settings.Default.radiobutton_Wifi) radioButtonWiFi.Checked = true;
+            if (Properties.Settings.Default.radiobutton_com) radioButtonComport.Checked = true;
         }
 
         private void buttonChooseFolder_Click(object sender, EventArgs e)
@@ -363,19 +365,6 @@ namespace xbitsServer
             
         }
 
-        private void radioButtonComport_Click(object sender, EventArgs e)
-        {
-            int con = 0;
-            string[] portNames = SerialPort.GetPortNames();     //<-- Reads all available comPorts
-            comboBoxComport.Items.Clear();
-            foreach (var portName in portNames)
-            {
-                comboBoxComport.Items.Add(portName);                  //<-- Adds Ports to combobox
-                con++;
-            }
-            if (con > 0) { comboBoxComport.SelectedIndex = 0; }
-        }
-
         private string WriteAndReadCom(string com)
         {
             lock (_Lock)
@@ -564,19 +553,33 @@ namespace xbitsServer
             waitserial.Set();
         }
 
-        private void comboBoxComport_MouseEnter(object sender, EventArgs e)
+        private void buttonEnumComport_Click(object sender, EventArgs e)
         {
             int con = 0;
             string[] portNames = SerialPort.GetPortNames();     //<-- Reads all available comPorts
             comboBoxComport.Items.Clear();
-            
+            comboBoxComport.BeginUpdate();
             foreach (var portName in portNames)
             {
                 comboBoxComport.Items.Add(portName);                  //<-- Adds Ports to combobox
                 con++;
             }
-            
+            comboBoxComport.EndUpdate();
+        }
 
+        private void radioButtonClicked(object sender, EventArgs e)
+        {
+            if(radioButtonWiFi.Checked)
+            {
+                Properties.Settings.Default.radiobutton_Wifi = true;
+                Properties.Settings.Default.radiobutton_com = false;
+            }
+            if(radioButtonComport.Checked)
+            {
+                Properties.Settings.Default.radiobutton_com = true;
+                Properties.Settings.Default.radiobutton_Wifi = false;
+            }
+            Properties.Settings.Default.Save();
         }
     }
 }

@@ -23,5 +23,11 @@
     <Setting Name="PassWord" Type="System.String" Scope="User">
       <Value Profile="(Default)">123456</Value>
     </Setting>
+    <Setting Name="radiobutton_Wifi" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="radiobutton_com" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
