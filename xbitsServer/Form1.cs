@@ -23,11 +23,9 @@ namespace xbitsServer
         public static IPAddress ipAddress;
         public static int PortNo = 3000;
         public static Thread serverThread;
-        public static Thread comportThread;
         static SerialPort SP1;
-        static AutoResetEvent waitserial;
+        
         private static readonly Object _Lock = new Object();
-        bool read_timeout_flag = false;
         String[] months = { "ETC", "Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec" };
         public StateObject state2;        
         public volatile bool stopServer = false;
@@ -52,8 +50,6 @@ namespace xbitsServer
         {
             InitializeComponent();
             SP1 = new SerialPort();
-            SP1.DataReceived += new SerialDataReceivedEventHandler(this.SP1_DataReceived);
-            waitserial = new AutoResetEvent(false);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -67,8 +63,6 @@ namespace xbitsServer
             }if(con > 0) { comboBoxComport.SelectedIndex = 0; }
 
             linkLabelPath.Text = Properties.Settings.Default.Path;
-            if (Properties.Settings.Default.radiobutton_Wifi) radioButtonWiFi.Checked = true;
-            if (Properties.Settings.Default.radiobutton_com) radioButtonComport.Checked = true;
         }
 
         private void buttonChooseFolder_Click(object sender, EventArgs e)
@@ -90,10 +84,11 @@ namespace xbitsServer
             allDone.Set();
             if(SP1.IsOpen)
             {
+                SP1.DataReceived -= new SerialDataReceivedEventHandler(this.SP1_DataReceived);
                 SP1.Dispose();
                 SP1.Close();
             }
-            
+           
             this.Close();
         }
 
@@ -257,7 +252,20 @@ namespace xbitsServer
             char[] charsToTrim = { '\r', '\n' };
             char[] charsToTrimPid = { ':' };
             String[] split = st.Split(charsToTrim);
-            DateTime dateString = DateTime.Parse(split[1]);
+            DateTime dateString=DateTime.Now;
+            try
+            {
+                dateString = DateTime.Parse(split[1]);
+            }catch(Exception)
+            {
+                Invoke(new Action(() =>
+                {
+                    toolStripStatus.Text = "Invalid Date received..";
+
+                }));
+                return;
+            }
+            
             int year = dateString.Year;
             int month = dateString.Month;
             int dayofmonth = dateString.Day;
@@ -298,6 +306,12 @@ namespace xbitsServer
                     file.Close();
                 }
             }
+            Invoke(new Action(() =>
+            {
+                toolStripStatus.Text = "Data received from PID: "+pid[1];
+
+            }));
+            return;
         }
 
         private void linkLabelPath_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -328,101 +342,23 @@ namespace xbitsServer
 
         private void buttonStartServer_Click(object sender, EventArgs e)
         {
-            
-            if (radioButtonWiFi.Checked)
+           
+            linkLabelPath.Text = Properties.Settings.Default.Path;
+            ipAddress = LocalIPAddress();
+            richTextBox1.Clear();
+            if (ipAddress == null)
             {
-                MessageBox.Show("WiFi checked");
-                linkLabelPath.Text = Properties.Settings.Default.Path;
-                ipAddress = LocalIPAddress();
-                richTextBox1.Clear();
-                if (ipAddress == null)
-                {
-                    richTextBox1.Text = "Please Check WiFi or Local Lan Connection..";
-                    return;
-                }
-                labelIPadd.Text = ipAddress.ToString();
-                richTextBox1.Clear();
-                richTextBox1.AppendText("Server is up and Listening on:" + labelIPadd.Text.ToString() + ":" + PortNo);
-                buttonStartServer.Enabled = false;
-                serverThread = new Thread(StartListening);
-                serverThread.Start();
+                richTextBox1.Text = "Please Check WiFi or Local Lan Connection..";
+                return;
             }
-            else
-            {
-                MessageBox.Show("Comport Selected");
-                if (!SP1.IsOpen)
-                {
-                    MessageBox.Show("Please open Com Port..");
-                    return;
-                }
-                buttonStartServer.Enabled = false;
-                richTextBox1.Clear();
-                richTextBox1.AppendText("Server is up and Listening Com Port:");
-                comportThread = new Thread(startListeningonComport);
-                comportThread.Start();
-            }
-            
-            
+            labelIPadd.Text = ipAddress.ToString();
+            richTextBox1.Clear();
+            richTextBox1.AppendText("Server is up and Listening on:" + labelIPadd.Text.ToString() + ":" + PortNo);
+            buttonStartServer.Enabled = false;
+            serverThread = new Thread(StartListening);
+            serverThread.Start();            
         }
-
-        private string WriteAndReadCom(string com)
-        {
-            lock (_Lock)
-            {
-                //string temp = null;
-
-                read_timeout_flag = false;
-                if (SP1.IsOpen == false)
-                {
-                    MessageBox.Show("Please connect to comm");
-                    return ("N");
-                }
-                SP1.DiscardInBuffer();
-                SP1.WriteTimeout = 2000;
-                SP1.ReadTimeout = 2000;
-                SP1.WriteLine(com);
-                int bytestoread = 0;
-                int timeup = 0;
-                do
-                {
-                    Thread.Sleep(100);
-                    bytestoread = SP1.BytesToRead;
-                    if (bytestoread > 0) break;
-                    timeup++;
-                    if (timeup > 60)
-                    {
-                        read_timeout_flag = true;
-                        break;
-                    }
-
-
-                } while (true);
-                if (read_timeout_flag == true)
-                {
-                    MessageBox.Show("Target Not Responding.\n Please check connections and cable");
-                    return "N";
-                }
-                //char[] buf = new char[bytestoread];
-                //try
-                //{
-                //    SP1.Read(buf, 0, bytestoread);
-                //    String xt = new string(buf);
-                //    //richTextBoxOut.AppendText(xt);
-                //    arrst = xt.Split(split);
-
-                //}
-                //catch (TimeoutException)
-                //{
-                //    read_timeout_flag = true;
-                //    MessageBox.Show("Target Not Responding.\n Please check connections and cable");
-                //    return "N";
-                //}
-
-                return ("A");
-
-            }
-        }
-
+            
         private void buttonOpenCom_Click(object sender, EventArgs e)
         {
             if (buttonOpenCom.Text.Equals("Open Com Port"))
@@ -437,16 +373,13 @@ namespace xbitsServer
                     MessageBox.Show("Select A Valid Comm Port");
                     return;
                 }
-                if (radioButton1.Checked)
-                {
-                    SP1.BaudRate = 115200;
-                }
-                else
-                {
-                    SP1.BaudRate = 9600;
-                }
+               
+                SP1.BaudRate = 115200;
                 SP1.PortName = Comportname;
-                SP1.ReadBufferSize = 4096;
+                SP1.DataBits = 8;
+                SP1.Parity = Parity.None;
+                SP1.StopBits = StopBits.One;
+                SP1.Handshake = Handshake.None;
                 SP1.ReadTimeout = 3000;
                 SP1.NewLine = "\r\n";
                 try
@@ -460,6 +393,10 @@ namespace xbitsServer
                 }
                 buttonOpenCom.Text = "Close Com Port";
                 buttonOpenCom.BackColor = Color.HotPink;
+                SP1.DataReceived += new SerialDataReceivedEventHandler(this.SP1_DataReceived);
+
+                richTextBox1.Clear();
+                richTextBox1.AppendText("Server is up and Listening Com Port:"+ Comportname+"\n");
             }
             else
             {
@@ -467,90 +404,107 @@ namespace xbitsServer
                 SP1.Dispose();
                 SP1.Close();
                 buttonOpenCom.Text = "Open Com Port";
-                buttonOpenCom.BackColor = Color.LightGreen; 
+                buttonOpenCom.BackColor = Color.LightGreen;
+                richTextBox1.AppendText("Serial Port Server is Down...\n");
             }
-        }
-        private String readComport(int timeout)
+        }       
+
+        private void ReadData()
         {
-            String res = String.Empty;
-            SP1.ReadTimeout = timeout;
+            char[] split = { ' ' };
+            String[] res;
+            int count = 0, command = 0;
+            String x = String.Empty;
             try
             {
-                res = SP1.ReadLine();
-            }catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message.ToString());
-                return "N";
+                x = SP1.ReadLine();
             }
-            return res;
-        }
-
-        private void startListeningonComport()
-        {
-            
-            stopComServer = true;
-            char[] split = { ' ' };
-            
-            String[] res;
-            waitserial.Reset();
-            while (stopComServer)
+            catch (TimeoutException tout)
             {
-                
-                int count=0;
-                waitserial.WaitOne();
-                String incom = readComport(2000);
-                if (incom.Equals("N"))
-                {
-                    continue;
-                }
-                if (incom.Length > 3)
-                {
-                    res = incom.Split(split);
-                }
-                else
-                {
-                    SP1.DiscardInBuffer();
-                    waitserial.Reset();
-                    continue;
-                }
-                try
-                {
-                    count = int.Parse(res[1]);
-                    SP1.WriteLine("A");
-                }catch(Exception)
-                {
-                    // To Do code here
-                    continue;
-                }
-                StringBuilder sb = new StringBuilder();
-                waitserial.Reset();
-                for( int sin=0; sin < count; sin++)
-                {
-                    waitserial.WaitOne();
-                    sb.Append(readComport(1000)+"\n");
-                }
-                SP1.WriteLine("A");
-                content = String.Empty;
-                content = sb.ToString();
-                WriteStringtoFile(content);
-                richTextBox1.Invoke(new Action(() => { richTextBox1.AppendText("\nReceived Data File From ComPort: "); }));
-
-            }
-        }
-        private void SP1_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            int bytestoread = 0;
-            //Thread.Sleep(10);
-            if (bytestoread > 0)
-            {
+                Debug.WriteLine(tout.ToString());
                 Invoke(new Action(() =>
-                {                    
-                    toolStripStatusLabel1.Text = "Data received..";
+                {
+                    toolStripStatus.Text = "Timeout Occured";
 
                 }));
+                return;
+            }
+
+            String qx = String.Empty;
+            res = x.Split(split);
+            try
+            {
+                count = int.Parse(res[1]);
+                command = int.Parse(res[0]);
+                SP1.WriteLine("A");
+            }
+            catch (Exception)
+            {
+                // To Do code here
+                Invoke(new Action(() =>
+                {
+                    toolStripStatus.Text = "Invalid start protocol received";
+
+                }));
+                return;
+            }
+            if (command != 30)
+            {
+                Invoke(new Action(() =>
+                {
+                    toolStripStatus.Text = "Invalid command received";
+
+                }));
+                return;
+            }
+            Debug.WriteLine(x);
+            SP1.WriteLine("A");
+            String pid = String.Empty;
+            for (int i = 0; i < count; i++)
+            {
+                try
+                {
+                    if (i == 0)
+                    {
+                        pid = SP1.ReadLine();
+                        qx = String.Copy(pid)+"\n";
+                    }else
+                    {
+                        qx += SP1.ReadLine() + "\n";
+                    }
+                    
+                }
+                catch (TimeoutException tout)
+                {
+                    Debug.WriteLine(tout.ToString());
+                    Invoke(new Action(() =>
+                    {
+                        toolStripStatus.Text = "Timeout occured during the receive string phase:";
+
+                    }));
+                    return;
+                }
 
             }
-            waitserial.Set();
+                        
+            Debug.WriteLine(qx);
+            WriteStringtoFile(qx);
+            Invoke(new Action(() =>
+            {
+                toolStripStatus.Text = "Data Received with "+pid;
+                richTextBox1.AppendText("Data Received with " + pid+"\n");
+            }));
+            SP1.WriteLine("A");
+
+        }
+
+        private void SP1_DataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            int datacount = SP1.BytesToRead;
+            if (datacount > 0)
+            {
+                ReadData();
+            }
         }
 
         private void buttonEnumComport_Click(object sender, EventArgs e)
@@ -567,19 +521,6 @@ namespace xbitsServer
             comboBoxComport.EndUpdate();
         }
 
-        private void radioButtonClicked(object sender, EventArgs e)
-        {
-            if(radioButtonWiFi.Checked)
-            {
-                Properties.Settings.Default.radiobutton_Wifi = true;
-                Properties.Settings.Default.radiobutton_com = false;
-            }
-            if(radioButtonComport.Checked)
-            {
-                Properties.Settings.Default.radiobutton_com = true;
-                Properties.Settings.Default.radiobutton_Wifi = false;
-            }
-            Properties.Settings.Default.Save();
-        }
+        
     }
 }

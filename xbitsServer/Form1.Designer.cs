@@ -40,20 +40,15 @@
             this.buttonPrint = new System.Windows.Forms.Button();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.buttonEnumComport = new System.Windows.Forms.Button();
             this.comboBoxComport = new System.Windows.Forms.ComboBox();
-            this.radioButtonComport = new System.Windows.Forms.RadioButton();
-            this.radioButtonWiFi = new System.Windows.Forms.RadioButton();
             this.buttonOpenCom = new System.Windows.Forms.Button();
             this.buttonStartServer = new System.Windows.Forms.Button();
             this.statusStrips = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.status = new System.Windows.Forms.ToolStripStatusLabel();
-            this.buttonEnumComport = new System.Windows.Forms.Button();
+            this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1.SuspendLayout();
-            this.panel1.SuspendLayout();
             this.statusStrips.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -168,10 +163,7 @@
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Info;
             this.groupBox1.Controls.Add(this.buttonEnumComport);
-            this.groupBox1.Controls.Add(this.panel1);
             this.groupBox1.Controls.Add(this.comboBoxComport);
-            this.groupBox1.Controls.Add(this.radioButtonComport);
-            this.groupBox1.Controls.Add(this.radioButtonWiFi);
             this.groupBox1.Controls.Add(this.buttonOpenCom);
             this.groupBox1.Controls.Add(this.buttonStartServer);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
@@ -182,38 +174,15 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Interface:";
             // 
-            // panel1
+            // buttonEnumComport
             // 
-            this.panel1.BackColor = System.Drawing.Color.Lavender;
-            this.panel1.Controls.Add(this.radioButton2);
-            this.panel1.Controls.Add(this.radioButton1);
-            this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.panel1.Location = new System.Drawing.Point(191, 118);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(156, 63);
-            this.panel1.TabIndex = 4;
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(21, 4);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(68, 28);
-            this.radioButton2.TabIndex = 0;
-            this.radioButton2.Text = "9600";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(21, 34);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(88, 28);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "115200";
-            this.radioButton1.UseVisualStyleBackColor = true;
+            this.buttonEnumComport.Location = new System.Drawing.Point(191, 75);
+            this.buttonEnumComport.Name = "buttonEnumComport";
+            this.buttonEnumComport.Size = new System.Drawing.Size(156, 31);
+            this.buttonEnumComport.TabIndex = 5;
+            this.buttonEnumComport.Text = "Enum Com Port";
+            this.buttonEnumComport.UseVisualStyleBackColor = true;
+            this.buttonEnumComport.Click += new System.EventHandler(this.buttonEnumComport_Click);
             // 
             // comboBoxComport
             // 
@@ -222,30 +191,6 @@
             this.comboBoxComport.Name = "comboBoxComport";
             this.comboBoxComport.Size = new System.Drawing.Size(151, 28);
             this.comboBoxComport.TabIndex = 3;
-            // 
-            // radioButtonComport
-            // 
-            this.radioButtonComport.AutoSize = true;
-            this.radioButtonComport.Location = new System.Drawing.Point(29, 75);
-            this.radioButtonComport.Name = "radioButtonComport";
-            this.radioButtonComport.Size = new System.Drawing.Size(110, 24);
-            this.radioButtonComport.TabIndex = 2;
-            this.radioButtonComport.Text = "COM PORT";
-            this.radioButtonComport.UseVisualStyleBackColor = true;
-            this.radioButtonComport.Click += new System.EventHandler(this.radioButtonClicked);
-            // 
-            // radioButtonWiFi
-            // 
-            this.radioButtonWiFi.AutoSize = true;
-            this.radioButtonWiFi.Checked = true;
-            this.radioButtonWiFi.Location = new System.Drawing.Point(29, 25);
-            this.radioButtonWiFi.Name = "radioButtonWiFi";
-            this.radioButtonWiFi.Size = new System.Drawing.Size(58, 24);
-            this.radioButtonWiFi.TabIndex = 2;
-            this.radioButtonWiFi.TabStop = true;
-            this.radioButtonWiFi.Text = "WiFi";
-            this.radioButtonWiFi.UseVisualStyleBackColor = true;
-            this.radioButtonWiFi.Click += new System.EventHandler(this.radioButtonClicked);
             // 
             // buttonOpenCom
             // 
@@ -274,7 +219,8 @@
             // 
             this.statusStrips.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1,
-            this.status});
+            this.status,
+            this.toolStripStatus});
             this.statusStrips.Location = new System.Drawing.Point(0, 722);
             this.statusStrips.Name = "statusStrips";
             this.statusStrips.Size = new System.Drawing.Size(907, 22);
@@ -292,15 +238,11 @@
             this.status.Name = "status";
             this.status.Size = new System.Drawing.Size(0, 17);
             // 
-            // buttonEnumComport
+            // toolStripStatus
             // 
-            this.buttonEnumComport.Location = new System.Drawing.Point(191, 75);
-            this.buttonEnumComport.Name = "buttonEnumComport";
-            this.buttonEnumComport.Size = new System.Drawing.Size(156, 31);
-            this.buttonEnumComport.TabIndex = 5;
-            this.buttonEnumComport.Text = "Enum Com Port";
-            this.buttonEnumComport.UseVisualStyleBackColor = true;
-            this.buttonEnumComport.Click += new System.EventHandler(this.buttonEnumComport_Click);
+            this.toolStripStatus.Name = "toolStripStatus";
+            this.toolStripStatus.Size = new System.Drawing.Size(13, 17);
+            this.toolStripStatus.Text = "..";
             // 
             // Form1
             // 
@@ -325,9 +267,6 @@
             this.Text = "Xbits Server";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.statusStrips.ResumeLayout(false);
             this.statusStrips.PerformLayout();
             this.ResumeLayout(false);
@@ -351,16 +290,12 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button buttonStartServer;
         private System.Windows.Forms.ComboBox comboBoxComport;
-        private System.Windows.Forms.RadioButton radioButtonComport;
-        private System.Windows.Forms.RadioButton radioButtonWiFi;
         private System.Windows.Forms.Button buttonOpenCom;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.StatusStrip statusStrips;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel status;
         private System.Windows.Forms.Button buttonEnumComport;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatus;
     }
 }
 
