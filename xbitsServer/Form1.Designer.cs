@@ -48,6 +48,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.status = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.statusStrips.SuspendLayout();
             this.SuspendLayout();
@@ -151,34 +152,35 @@
             // buttonPrint
             // 
             this.buttonPrint.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonPrint.Location = new System.Drawing.Point(376, 95);
+            this.buttonPrint.Location = new System.Drawing.Point(225, 181);
             this.buttonPrint.Name = "buttonPrint";
-            this.buttonPrint.Size = new System.Drawing.Size(105, 33);
+            this.buttonPrint.Size = new System.Drawing.Size(122, 33);
             this.buttonPrint.TabIndex = 6;
-            this.buttonPrint.Text = "Print";
+            this.buttonPrint.Text = "Print Patient Data";
             this.buttonPrint.UseVisualStyleBackColor = true;
             this.buttonPrint.Click += new System.EventHandler(this.buttonPrint_Click);
             // 
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.Info;
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.buttonEnumComport);
             this.groupBox1.Controls.Add(this.comboBoxComport);
             this.groupBox1.Controls.Add(this.buttonOpenCom);
             this.groupBox1.Controls.Add(this.buttonStartServer);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.groupBox1.Location = new System.Drawing.Point(505, 20);
+            this.groupBox1.Location = new System.Drawing.Point(514, 20);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(372, 245);
+            this.groupBox1.Size = new System.Drawing.Size(363, 215);
             this.groupBox1.TabIndex = 16;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Interface:";
             // 
             // buttonEnumComport
             // 
-            this.buttonEnumComport.Location = new System.Drawing.Point(191, 75);
+            this.buttonEnumComport.Location = new System.Drawing.Point(22, 80);
             this.buttonEnumComport.Name = "buttonEnumComport";
-            this.buttonEnumComport.Size = new System.Drawing.Size(156, 31);
+            this.buttonEnumComport.Size = new System.Drawing.Size(219, 31);
             this.buttonEnumComport.TabIndex = 5;
             this.buttonEnumComport.Text = "Enum Com Port";
             this.buttonEnumComport.UseVisualStyleBackColor = true;
@@ -196,22 +198,22 @@
             // 
             this.buttonOpenCom.BackColor = System.Drawing.Color.LightGreen;
             this.buttonOpenCom.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.buttonOpenCom.Location = new System.Drawing.Point(191, 189);
+            this.buttonOpenCom.Location = new System.Drawing.Point(22, 121);
             this.buttonOpenCom.Name = "buttonOpenCom";
-            this.buttonOpenCom.Size = new System.Drawing.Size(151, 38);
+            this.buttonOpenCom.Size = new System.Drawing.Size(219, 38);
             this.buttonOpenCom.TabIndex = 1;
-            this.buttonOpenCom.Text = "Open Com Port";
+            this.buttonOpenCom.Text = "Start Com Port Server";
             this.buttonOpenCom.UseVisualStyleBackColor = false;
             this.buttonOpenCom.Click += new System.EventHandler(this.buttonOpenCom_Click);
             // 
             // buttonStartServer
             // 
             this.buttonStartServer.BackColor = System.Drawing.Color.LightBlue;
-            this.buttonStartServer.Location = new System.Drawing.Point(29, 189);
+            this.buttonStartServer.Location = new System.Drawing.Point(22, 165);
             this.buttonStartServer.Name = "buttonStartServer";
-            this.buttonStartServer.Size = new System.Drawing.Size(151, 38);
+            this.buttonStartServer.Size = new System.Drawing.Size(219, 38);
             this.buttonStartServer.TabIndex = 1;
-            this.buttonStartServer.Text = "START SERVER";
+            this.buttonStartServer.Text = "START WiFi SERVER";
             this.buttonStartServer.UseVisualStyleBackColor = false;
             this.buttonStartServer.Click += new System.EventHandler(this.buttonStartServer_Click);
             // 
@@ -244,6 +246,15 @@
             this.toolStripStatus.Size = new System.Drawing.Size(13, 17);
             this.toolStripStatus.Text = "..";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(57, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(128, 20);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Select Com Port:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -267,6 +278,7 @@
             this.Text = "Xbits Server";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.statusStrips.ResumeLayout(false);
             this.statusStrips.PerformLayout();
             this.ResumeLayout(false);
@@ -296,6 +308,7 @@
         private System.Windows.Forms.ToolStripStatusLabel status;
         private System.Windows.Forms.Button buttonEnumComport;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatus;
+        private System.Windows.Forms.Label label2;
     }
 }
 

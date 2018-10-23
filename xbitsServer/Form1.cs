@@ -361,7 +361,7 @@ namespace xbitsServer
             
         private void buttonOpenCom_Click(object sender, EventArgs e)
         {
-            if (buttonOpenCom.Text.Equals("Open Com Port"))
+            if (buttonOpenCom.Text.Equals("Start Com Port Server"))
             {
                 string Comportname;
                 try
@@ -391,7 +391,7 @@ namespace xbitsServer
                     MessageBox.Show(se.Message.ToString());
                     return;
                 }
-                buttonOpenCom.Text = "Close Com Port";
+                buttonOpenCom.Text = "Close Com Port Server";
                 buttonOpenCom.BackColor = Color.HotPink;
                 SP1.DataReceived += new SerialDataReceivedEventHandler(this.SP1_DataReceived);
 
@@ -403,7 +403,7 @@ namespace xbitsServer
                 SP1.DataReceived -= new SerialDataReceivedEventHandler(this.SP1_DataReceived);
                 SP1.Dispose();
                 SP1.Close();
-                buttonOpenCom.Text = "Open Com Port";
+                buttonOpenCom.Text = "Start Com Port Server";
                 buttonOpenCom.BackColor = Color.LightGreen;
                 richTextBox1.AppendText("Serial Port Server is Down...\n");
             }
@@ -419,9 +419,9 @@ namespace xbitsServer
             {
                 x = SP1.ReadLine();
             }
-            catch (TimeoutException tout)
+            catch (TimeoutException )
             {
-                Debug.WriteLine(tout.ToString());
+                //Debug.WriteLine(tout.ToString());
                 Invoke(new Action(() =>
                 {
                     toolStripStatus.Text = "Timeout Occured";
@@ -457,7 +457,7 @@ namespace xbitsServer
                 }));
                 return;
             }
-            Debug.WriteLine(x);
+            //Debug.WriteLine(x);
             SP1.WriteLine("A");
             String pid = String.Empty;
             for (int i = 0; i < count; i++)
@@ -474,9 +474,9 @@ namespace xbitsServer
                     }
                     
                 }
-                catch (TimeoutException tout)
+                catch (TimeoutException )
                 {
-                    Debug.WriteLine(tout.ToString());
+                    //Debug.WriteLine(tout.ToString());
                     Invoke(new Action(() =>
                     {
                         toolStripStatus.Text = "Timeout occured during the receive string phase:";
@@ -487,8 +487,8 @@ namespace xbitsServer
 
             }
                         
-            Debug.WriteLine(qx);
-            WriteStringtoFile(qx);
+            //Debug.WriteLine(qx);
+            WriteStringtoFile(qx);  //Write the received Data to a txt file.
             Invoke(new Action(() =>
             {
                 toolStripStatus.Text = "Data Received with "+pid;
@@ -509,14 +509,12 @@ namespace xbitsServer
 
         private void buttonEnumComport_Click(object sender, EventArgs e)
         {
-            int con = 0;
             string[] portNames = SerialPort.GetPortNames();     //<-- Reads all available comPorts
             comboBoxComport.Items.Clear();
             comboBoxComport.BeginUpdate();
             foreach (var portName in portNames)
             {
-                comboBoxComport.Items.Add(portName);                  //<-- Adds Ports to combobox
-                con++;
+                comboBoxComport.Items.Add(portName);            //<-- Adds Ports to combobox
             }
             comboBoxComport.EndUpdate();
         }
