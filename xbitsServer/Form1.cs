@@ -247,7 +247,9 @@ namespace xbitsServer
 
         private  void WriteStringtoFile(String st)
         {
-           
+
+            CultureInfo provider = new CultureInfo("en-IN");
+            DateTimeStyles styles = DateTimeStyles.None;
             String path = String.Empty;
             char[] charsToTrim = { '\r', '\n' };
             char[] charsToTrimPid = { ':' };
@@ -255,7 +257,7 @@ namespace xbitsServer
             DateTime dateString=DateTime.Now;
             try
             {
-                dateString = DateTime.Parse(split[1]);
+                dateString = DateTime.Parse(split[1],provider,styles);
             }catch(Exception)
             {
                 Invoke(new Action(() =>
