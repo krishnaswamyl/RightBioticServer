@@ -19,6 +19,7 @@ namespace xbitsServer
     public partial class PatientDetails : Form
     {
         private String fileName = String.Empty;
+        String[] months = { "ETC", "Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec" };
         public PatientDetails()
         {
             InitializeComponent();
@@ -50,10 +51,35 @@ namespace xbitsServer
 
         private void buttonSelect_Click(object sender, EventArgs e)
         {
+            DateTime dt = DateTime.Now;
+            String dts, mnth, yr;
+
+            int year = dt.Year;
+            String path = Properties.Settings.Default.Path;
+            path += "RightBiotic";
+            yr = path + "\\" + year.ToString();
+            mnth = yr + "\\" + months[dt.Month];
+            dts = mnth + "\\" + dt.Day;
+
+            richTextBox1.Clear();
+
             OpenFileDialog choofdlog = new OpenFileDialog();
             choofdlog.Filter = "All Files (*.txt)|*.txt";
             choofdlog.FilterIndex = 1;
-            //choofdlog.InitialDirectory = Properties.Settings.Default.Path.ToString() + "RightBiotic\\";
+            if(Directory.Exists(dts))
+            choofdlog.InitialDirectory = dts;
+            else
+                if (Directory.Exists(mnth))
+                choofdlog.InitialDirectory = mnth;
+            else
+                if (Directory.Exists(yr))
+                choofdlog.InitialDirectory = yr;
+            else
+                if (Directory.Exists(path))
+                choofdlog.InitialDirectory = path;
+            else
+                choofdlog.InitialDirectory = Properties.Settings.Default.Path;
+
             DialogResult dr = choofdlog.ShowDialog();
             if(dr == DialogResult.Cancel)
             {
@@ -110,6 +136,7 @@ namespace xbitsServer
         private void buttonPrint_Click(object sender, EventArgs e)
         {
             String pid = textBoxPid.Text;
+            bool AstFlag = true;
             if (pid.Length < 1)
             {
                 MessageBox.Show("Patient ID is less than 5 characters\n Please select a vaild File");
@@ -118,6 +145,7 @@ namespace xbitsServer
             String F_name = String.Empty;
             char[] trim = { '.' };
             char[] trimspace = { ' ' };
+            char[] trimcomma = { ',' };
             int Top, Left, Right, Bottom = 50;
             Top = Properties.Settings.Default.Top;
             Left = Properties.Settings.Default.Left;
@@ -136,6 +164,12 @@ namespace xbitsServer
                 }
             }
             lines = list.ToArray();
+
+            if(lines[3].Contains("CONTAMINATION"))
+            {
+                MessageBox.Show("Test Result: CONTAMINATED..\n Test Re Run was recommented..");
+                return;
+            }
             fileStream.Close();
             DateTime dt = dateTimePicker1.Value;
 
@@ -214,7 +248,7 @@ namespace xbitsServer
             para.Add(new Chunk("Sample"));
             para.Add(Chunk.TABBING);
             para.Add(new Chunk(": "));
-            para.Add(new Chunk("Urine\n"));
+            para.Add(new Chunk(lines[2] +"\n"));
             para.Add(new Chunk("Test"));
             para.Add(Chunk.TABBING);
             para.Add(new Chunk(": "));
@@ -223,119 +257,101 @@ namespace xbitsServer
             para.Add(new Chunk("Organism Name"));
             para.Add(Chunk.TABBING);
             para.Add(new Chunk(": "));
-            para.Add(new Chunk(lines[2] + "\n"));
-           
-            para.Add(new Chunk("Volume"));
-            para.Add(Chunk.TABBING);
-            para.Add(new Chunk(": "));
-            para.Add(new Chunk(lines[3]+ "\n"));
-            document.Add(para);
-
-            table = new PdfPTable(7);
-            table.TotalWidth = 470f;
-            widths = new float[] { 0.6f, 3f, 0.8f, 0.2f, 0.6f, 3f, 0.8f };
-            table.SetWidths(widths);
-            //fix the absolute width of the table
-            table.LockedWidth = true;
-            table.SpacingBefore = 5;
-            iTextSharp.text.Font f = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.TIMES_ROMAN, 13, 1);
-            table.HorizontalAlignment = 0;
-            PdfPCell pc = new PdfPCell(new Phrase("S.no", f));
-            pc.HorizontalAlignment = 0;
-            table.AddCell(pc);
-            pc = new PdfPCell(new Phrase("Antibiotic Name", f));
-            pc.HorizontalAlignment = 0;
-            table.AddCell(pc);
-
-            pc = new PdfPCell(new Phrase("Result", f));
-            pc.HorizontalAlignment = 0;
-            table.AddCell(pc);
-
-            pc = new PdfPCell(new Phrase(" "));
-            pc.HorizontalAlignment = 0;
-            pc.Rowspan = 23;
-            table.AddCell(pc);
-
-            pc = new PdfPCell(new Phrase("S.no", f));
-            pc.HorizontalAlignment = 0;
-            table.AddCell(pc);
-            pc = new PdfPCell(new Phrase("Antibiotic Name", f));
-            pc.HorizontalAlignment = 0;
-            table.AddCell(pc);
-
-            pc = new PdfPCell(new Phrase("Result", f));
-            pc.HorizontalAlignment = 0;
-            table.AddCell(pc);
-            font = new iTextSharp.text.Font(bf, 12, iTextSharp.text.Font.NORMAL);
-            int count = lines.Length;
-            int re = 0;
-            int oddeven = 0;
-            int len = 0;
-            len = (count - 5);
-            oddeven = len % 2;
-            count = (int)len / 2;
-            if (oddeven == 1)
+            String[] org = lines[3].Split(trimcomma);
+            if(org.Length > 1)          // if more than one bacteria name is found. Print bacteria 2 in next line.
             {
-                count += 1;               
+                para.Add(new Chunk("1. " + org[0]+"\n"));
+                para.Add(Chunk.TABBING);
+                para.Add(new Chunk("  "));
+                para.Add(new Chunk("2. " + org[1] + "\n"));
             }
-            re = count + 1;
-
-            int le = 1;
-            string[] antres;
-            char[] spl = { ',' };
-            for (int m = 0; m < count; m++)
-            {
-                pc = new PdfPCell(new Phrase(le++.ToString("00"), font));
-                pc.HorizontalAlignment = 0;
-                table.AddCell(pc);
-
-               
-                antres = lines[m + 4].Split(spl);
-                pc = new PdfPCell(new Phrase(antres[0], font));
-
-                pc.HorizontalAlignment = 0;
-                table.AddCell(pc);
-                Phrase tr = null;
-                switch (antres[1])
+            else        // Else print only one bacteria name in the given line
+            {               
+                if (lines[3].Contains("BACTERIA ABSENT"))
                 {
-                    case "I":
-                        tr = new Phrase(antres[1], font);
-                        break;
-
-                    case "R":
-                        tr = new Phrase(antres[1], fontRed);
-                        break;
-                    case "S":
-                        tr = new Phrase(antres[1], fontGreen);
-                        break;
-                }             
-                
-                pc = new PdfPCell(tr);
-                pc.HorizontalAlignment = 1;
-                table.AddCell(pc);
-
-                antres = lines[3+re].Split(spl);
-                pc = new PdfPCell(new Phrase(re++.ToString("00"), font));
-                pc.HorizontalAlignment = 0;
-                table.AddCell(pc);
-
-                if (antres.Length == 1)
-                {
-                    pc = new PdfPCell(new Phrase(" ", font));
+                    para.Add(new Chunk(lines[3] + "\n"));
+                    document.Add(para);                    
+                    AstFlag = false;
                 }
                 else
                 {
-                    pc = new PdfPCell(new Phrase(antres[0], font));
-                }
+                    para.Add(new Chunk(lines[3] + "\n"));
+                }              
+                
+            }    
+            if(AstFlag)         // Print only if Bacteria is present
+            {
+                para.Add(new Chunk("Volume"));
+                para.Add(Chunk.TABBING);
+                para.Add(new Chunk(": "));
+                para.Add(new Chunk(lines[4] + "\n"));
+                document.Add(para);
+
+                table = new PdfPTable(7);
+                table.TotalWidth = 470f;
+                widths = new float[] { 0.6f, 3f, 0.8f, 0.2f, 0.6f, 3f, 0.8f };
+                table.SetWidths(widths);
+                //fix the absolute width of the table
+                table.LockedWidth = true;
+                table.SpacingBefore = 5;
+                iTextSharp.text.Font f = new iTextSharp.text.Font(iTextSharp.text.Font.FontFamily.TIMES_ROMAN, 13, 1);
+                table.HorizontalAlignment = 0;
+                PdfPCell pc = new PdfPCell(new Phrase("S.no", f));
+                pc.HorizontalAlignment = 0;
+                table.AddCell(pc);
+                pc = new PdfPCell(new Phrase("Antibiotic Name", f));
                 pc.HorizontalAlignment = 0;
                 table.AddCell(pc);
 
-                if (antres.Length == 1)
+                pc = new PdfPCell(new Phrase("Result", f));
+                pc.HorizontalAlignment = 0;
+                table.AddCell(pc);
+
+                pc = new PdfPCell(new Phrase(" "));
+                pc.HorizontalAlignment = 0;
+                pc.Rowspan = 23;
+                table.AddCell(pc);
+
+                pc = new PdfPCell(new Phrase("S.no", f));
+                pc.HorizontalAlignment = 0;
+                table.AddCell(pc);
+                pc = new PdfPCell(new Phrase("Antibiotic Name", f));
+                pc.HorizontalAlignment = 0;
+                table.AddCell(pc);
+
+                pc = new PdfPCell(new Phrase("Result", f));
+                pc.HorizontalAlignment = 0;
+                table.AddCell(pc);
+                font = new iTextSharp.text.Font(bf, 12, iTextSharp.text.Font.NORMAL);
+                int count = lines.Length;
+                int re = 0;
+                int oddeven = 0;
+                int len = 0;
+                len = (count - 5);
+                oddeven = len % 2;
+                count = (int)len / 2;
+                if (oddeven == 1)
                 {
-                    tr = new Phrase(" ", font);
-                }else
+                    count += 1;
+                }
+                re = count + 1;
+
+                int le = 1;
+                string[] antres;
+                char[] spl = { ',' };
+                for (int m = 0; m < count; m++)
                 {
-                    
+                    pc = new PdfPCell(new Phrase(le++.ToString("00"), font));
+                    pc.HorizontalAlignment = 0;
+                    table.AddCell(pc);
+
+
+                    antres = lines[m + 5].Split(spl);
+                    pc = new PdfPCell(new Phrase(antres[0], font));
+
+                    pc.HorizontalAlignment = 0;
+                    table.AddCell(pc);
+                    Phrase tr = null;
                     switch (antres[1])
                     {
                         case "I":
@@ -349,32 +365,77 @@ namespace xbitsServer
                             tr = new Phrase(antres[1], fontGreen);
                             break;
                     }
-                    //tr = new Phrase(antres[1], font);
+
+                    pc = new PdfPCell(tr);
+                    pc.HorizontalAlignment = 1;
+                    table.AddCell(pc);
+
+                    antres = lines[3 + re].Split(spl);
+                    pc = new PdfPCell(new Phrase(re++.ToString("00"), font));
+                    pc.HorizontalAlignment = 0;
+                    table.AddCell(pc);
+
+                    if (antres.Length == 1)
+                    {
+                        pc = new PdfPCell(new Phrase(" ", font));
+                    }
+                    else
+                    {
+                        pc = new PdfPCell(new Phrase(antres[0], font));
+                    }
+                    pc.HorizontalAlignment = 0;
+                    table.AddCell(pc);
+
+                    if (antres.Length == 1)
+                    {
+                        tr = new Phrase(" ", font);
+                    }
+                    else
+                    {
+
+                        switch (antres[1])
+                        {
+                            case "I":
+                                tr = new Phrase(antres[1], font);
+                                break;
+
+                            case "R":
+                                tr = new Phrase(antres[1], fontRed);
+                                break;
+                            case "S":
+                                tr = new Phrase(antres[1], fontGreen);
+                                break;
+                        }
+                        //tr = new Phrase(antres[1], font);
+                    }
+
+                    pc = new PdfPCell(tr);
+                    pc.HorizontalAlignment = 1;
+                    table.AddCell(pc);
+
                 }
-               
-                pc = new PdfPCell(tr);
-                pc.HorizontalAlignment = 1;
-                table.AddCell(pc);
 
-            }
-
-            document.Add(table);
-            para = new Paragraph();
-            //para.Alignment = Element.ALIGN_CENTER;
-            para.SpacingBefore = 2;
+                document.Add(table);
+                para = new Paragraph();
+                //para.Alignment = Element.ALIGN_CENTER;
+                para.SpacingBefore = 2;
 
 
-            para.Font = font;
-            para.Add(new Chunk("R: RESISTANT"));
-            para.Add(Chunk.TABBING);
-            para.Add(Chunk.TABBING);
-            para.Add(Chunk.TABBING);
-            para.Add(new Chunk("S: SENSITIVE"));
-            para.Add(Chunk.TABBING);
-            para.Add(Chunk.TABBING);
-            para.Add(Chunk.TABBING);
-            para.Add(new Chunk("I: INTERMEDIATE"));
-            document.Add(para);
+                para.Font = font;
+                para.Add(new Chunk("R: RESISTANT"));
+                para.Add(Chunk.TABBING);
+                para.Add(Chunk.TABBING);
+                para.Add(Chunk.TABBING);
+                para.Add(new Chunk("S: SENSITIVE"));
+                para.Add(Chunk.TABBING);
+                para.Add(Chunk.TABBING);
+                para.Add(Chunk.TABBING);
+                para.Add(new Chunk("I: INTERMEDIATE"));
+                document.Add(para);
+
+            }  
+           
+            
 
             PdfPTable res = new PdfPTable(3);
             res.TotalWidth = 470f;
