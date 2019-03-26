@@ -319,21 +319,53 @@ namespace xbitsServer
         private void linkLabelPath_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             DateTime dt = DateTime.Now;
+            String dts, mnth, yr;
 
             int year = dt.Year;
             String path = Properties.Settings.Default.Path;
-            path += "RightBiotic\\"+year.ToString();
-            path += "\\"+months[dt.Month];
+            path += "RightBiotic";
+            yr   = path + "\\" + year.ToString();
+            mnth = yr + "\\" + months[dt.Month];
+            dts  = mnth + "\\" + dt.Day;
+
+            if(Directory.Exists(dts))
+            {
+                ShowFileExplorer(dts);
+                return;
+            }
+            if (Directory.Exists(mnth))
+            {
+                ShowFileExplorer(mnth);
+                return;
+            }
+            if (Directory.Exists(yr))
+            {
+                ShowFileExplorer(yr);
+                return;
+            }
+            if (Directory.Exists(path))
+            {
+                ShowFileExplorer(path);
+            }
+            else
+            {
+                ShowFileExplorer(Properties.Settings.Default.Path);
+            }
+
+            return;
+        }
+
+        private void ShowFileExplorer(String path)
+        {
             try
             {
                 Process.Start(path);
-            }catch(Win32Exception )
-            {
-                path = Properties.Settings.Default.Path;
-                Process.Start(path);
-                //MessageBox.Show(ex.Message.ToString());
+                return;
             }
-            
+            catch (Win32Exception)
+            {
+                Process.Start(Properties.Settings.Default.Path);
+            }
         }
 
         private void buttonPrint_Click(object sender, EventArgs e)
