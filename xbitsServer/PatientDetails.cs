@@ -437,56 +437,56 @@ namespace xbitsServer
            
             
 
-            PdfPTable res = new PdfPTable(3);
-            res.TotalWidth = 470f;
-            res.LockedWidth = true;
-            //widths = new float[] { 3f, 1f, 3f,};
-            //res.SetWidths(widths);
-            res.HorizontalAlignment = 0;
-            res.SpacingBefore = 15;
+            //PdfPTable res = new PdfPTable(3);
+            //res.TotalWidth = 470f;
+            //res.LockedWidth = true;
+            ////widths = new float[] { 3f, 1f, 3f,};
+            ////res.SetWidths(widths);
+            //res.HorizontalAlignment = 0;
+            //res.SpacingBefore = 15;
 
-            //relative col widths in proportions - 1/3 and 2/3
-            float[] wid = new float[] { 2f, 0.5f, 2f };
-            res.SetWidths(wid);
+            ////relative col widths in proportions - 1/3 and 2/3
+            //float[] wid = new float[] { 2f, 0.5f, 2f };
+            //res.SetWidths(wid);
 
-            Chunk ck = new Chunk("B");
-            ck.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f, 1, BaseColor.RED);
-            para = new Paragraph();
-            para.SpacingBefore = 10;
-            para.Add(new Chunk("Only for Office Use"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("RIGHT"));
-            para.Add(ck);
-            para.Add(new Chunk("IOTIC REPORT"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("TECHNICIAN:_________________"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("\n"));
+            //Chunk ck = new Chunk("B");
+            //ck.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f, 1, BaseColor.RED);
+            //para = new Paragraph();
+            //para.SpacingBefore = 10;
+            //para.Add(new Chunk("Only for Office Use"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("RIGHT"));
+            //para.Add(ck);
+            //para.Add(new Chunk("IOTIC REPORT"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("TECHNICIAN:_________________"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("\n"));
 
-            res.AddCell(new PdfPCell(para));
-            PdfPCell dd = new PdfPCell();
-            dd.Border = 0;
-            res.AddCell(dd);
+            //res.AddCell(new PdfPCell(para));
+            //PdfPCell dd = new PdfPCell();
+            //dd.Border = 0;
+            //res.AddCell(dd);
 
 
-            para = new Paragraph();
-            para.SpacingBefore = 10;
-            para.Add(new Chunk("DEPARTMENT OF PATHOLOGY"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("\n"));
-            //para.Add(new Chunk("Dr. ____________________"));
-            para.Add(new Chunk("Dr."+textBoxRepDoc.Text));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("Sign ___________________"));
-            para.Add(new Chunk("\n"));
-            para.Add(new Chunk("\n"));
-            res.AddCell(new PdfPCell(para));
-            document.Add(res);
+            //para = new Paragraph();
+            //para.SpacingBefore = 10;
+            //para.Add(new Chunk("DEPARTMENT OF PATHOLOGY"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("\n"));
+            ////para.Add(new Chunk("Dr. ____________________"));
+            //para.Add(new Chunk("Dr."+textBoxRepDoc.Text));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("Sign ___________________"));
+            //para.Add(new Chunk("\n"));
+            //para.Add(new Chunk("\n"));
+            //res.AddCell(new PdfPCell(para));
+            //document.Add(res);
             document.Dispose();
             //document.NewPage();
             System.Diagnostics.Process.Start(F_name);
